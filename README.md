@@ -161,8 +161,8 @@ el historial.
 
 **Requisitos:** Java 21 o superior, PostgreSQL y VS Code con *Extension Pack for Java*.
 
-1. **Base de datos.** Seguir `bd/LEEME_instalacion.txt`: crear la base `sica_qr` y ejecutar
-   `01_SICA_QR_estructura.sql` y luego `02_SICA_QR_datos_prueba.sql`.
+1. **Base de datos.** En PostgreSQL, crear la base `sica_qr` y ejecutar en ella, en este orden,
+   `bd/01_SICA_QR_estructura.sql` (17 tablas) y `bd/02_SICA_QR_datos_prueba.sql` (datos ficticios).
 2. **Contraseña.** Crear en la raíz del proyecto (junto a `pom.xml`) la carpeta `config` y,
    dentro, un archivo `application.properties` con una sola línea:
    `spring.datasource.password=TU_CONTRASENA`.

@@ -1,23 +1,19 @@
 -- =====================================================
 -- SICA-QR · Datos de prueba
 -- Motor: PostgreSQL 14 o superior
+-- Requiere: 01_SICA_QR_estructura.sql
 --
--- Ejecutar DESPUES de 01_SICA_QR_estructura.sql
+-- Datos ficticios para las 17 tablas. Ningún nombre ni
+-- DNI corresponde a una persona real.
 --
--- Carga datos ficticios en las 17 tablas para poder
--- probar el sistema y ver informacion en todas las
--- pantallas. Ningun nombre ni DNI corresponde a una
--- persona real.
+-- Usuarios (usuario / contraseña / rol):
+--   admin      / admin123      / Administrador
+--   auxiliar   / auxiliar123   / Auxiliar de educación
+--   docente    / docente123    / Docente o tutor
+--   direccion  / direccion123  / Dirección
 --
--- Usuarios de prueba (usuario / contrasena):
---   admin      / admin123      Administrador
---   auxiliar   / auxiliar123   Auxiliar de educacion
---   docente    / docente123    Docente o tutor
---   direccion  / direccion123  Direccion
---
--- Las contrasenas se guardan cifradas con SHA-256 y una
--- sal ("SICA-QR-14762" + contrasena), el mismo calculo
--- que hace la aplicacion Java con Google Guava.
+-- Contraseñas almacenadas como SHA-256 de
+-- "SICA-QR-14762" + contraseña (ver UtilClave.java).
 -- =====================================================
 
 BEGIN;
@@ -47,7 +43,7 @@ INSERT INTO usuario (id_rol, nombre_usuario, clave_hash, nombres, apellidos, cor
  'Manuel Antonio', 'Chunga Flores', 'direccion@sicaqr.edu.pe');
 
 -- =====================================================
--- 2. ORGANIZACION ACADEMICA
+-- 2. ORGANIZACIÓN ACADÉMICA
 -- =====================================================
 
 INSERT INTO grado (nombre, nivel_educativo) VALUES
@@ -68,7 +64,7 @@ INSERT INTO periodo_academico (anio, fecha_inicio, fecha_fin, estado)
 VALUES (2026, DATE '2026-03-09', DATE '2026-12-18', 'ACTIVO');
 
 -- =====================================================
--- 3. CONFIGURACION INSTITUCIONAL (RF-02)
+-- 3. CONFIGURACIÓN INSTITUCIONAL (RF-02)
 --    Entrada 07:30, tolerancia 10 min, corte 09:00
 --    -> hasta 07:40 PUNTUAL, hasta 08:59 TARDANZA
 -- =====================================================
@@ -119,7 +115,7 @@ LEFT JOIN (VALUES
 WHERE p.anio = 2026;
 
 -- =====================================================
--- 5. ESTUDIANTES (20, datos ficticios)
+-- 5. ESTUDIANTES
 -- =====================================================
 
 INSERT INTO estudiante (codigo, dni, nombres, apellidos, fecha_nacimiento) VALUES
@@ -145,7 +141,7 @@ INSERT INTO estudiante (codigo, dni, nombres, apellidos, fecha_nacimiento) VALUE
 ('EST-2026-0020', '81234520', 'Ian Gabriel',     'Zapata Alvarado',   DATE '2009-11-22');
 
 -- =====================================================
--- 6. APODERADOS Y VINCULO CON ESTUDIANTES
+-- 6. APODERADOS Y VÍNCULO CON ESTUDIANTES
 -- =====================================================
 
 INSERT INTO apoderado (dni, nombres, apellidos, telefono, correo, canal_preferido) VALUES
@@ -178,7 +174,7 @@ FROM estudiante e
 JOIN apoderado a ON a.dni = '412345' || LPAD(e.id_estudiante::TEXT, 2, '0')
 WHERE e.id_estudiante <= 19;
 
--- Hermanos: la apoderada de la estudiante 1 tambien lo es del 20
+-- Apoderado compartido por los estudiantes 1 y 20
 INSERT INTO estudiante_apoderado (id_estudiante, id_apoderado, parentesco, es_principal)
 VALUES (20, 1, 'Madre', TRUE);
 
@@ -187,7 +183,7 @@ INSERT INTO estudiante_apoderado (id_estudiante, id_apoderado, parentesco, es_pr
 VALUES (15, 16, 'Tío', FALSE, FALSE);
 
 -- =====================================================
--- 7. MATRICULAS
+-- 7. MATRÍCULAS
 --    1-5   -> Primaria 5.° A
 --    6-10  -> Primaria 6.° A
 --    11-15 -> Secundaria 3.° B
@@ -213,7 +209,7 @@ JOIN seccion s ON s.id_seccion = (
 -- =====================================================
 -- 8. CREDENCIALES QR (RF-11)
 --    El token es un UUID aleatorio: no contiene datos
---    del estudiante (Ley N.o 29733)
+--    del estudiante (Ley N.° 29733)
 -- =====================================================
 
 -- Credencial revocada del estudiante 4 (perdida)
@@ -238,7 +234,7 @@ FROM estudiante e;
 
 -- =====================================================
 -- 9. REGISTROS DE ASISTENCIA (RF-01, RF-02, RF-10)
---    Ultimos 10 dias laborables antes de hoy.
+--    Últimos 10 días laborables anteriores a la fecha actual.
 --    Puntual <= 07:40 < Tardanza < 09:00 <= Inasistencia
 -- =====================================================
 
@@ -305,7 +301,7 @@ FROM horas h;
 -- 10. JUSTIFICACIONES (RF-05, RF-06)
 -- =====================================================
 
--- Una aprobada y el resto pendientes, sobre inasistencias
+-- Justificaciones sobre inasistencias: una aprobada y dos pendientes
 INSERT INTO justificacion (
     id_registro, id_usuario_registro, id_usuario_revisor, motivo,
     observacion, estado, presentada_en, revisada_en, comentario_revision
@@ -328,9 +324,8 @@ FROM (
 WHERE fila <= 3;
 
 -- =====================================================
--- 11. ALERTAS POR ACUMULACION (RF-08)
---     Se generan para las matriculas que superan el
---     umbral de 3 tardanzas en los dias cargados
+-- 11. ALERTAS POR ACUMULACIÓN (RF-08)
+--     Matrículas que superan el umbral de 3 tardanzas
 -- =====================================================
 
 INSERT INTO alerta (id_matricula, tipo, nivel, cantidad_acumulada, estado)
@@ -347,7 +342,7 @@ HAVING COUNT(*) >= 3;
 -- =====================================================
 -- 12. NOTIFICACIONES AL APODERADO (RF-09)
 --     Una por cada tardanza o inasistencia, dirigida al
---     apoderado principal que recibe notificaciones
+--     apoderado principal
 -- =====================================================
 
 INSERT INTO notificacion (
@@ -380,7 +375,7 @@ JOIN apoderado a             ON a.id_apoderado = ea.id_apoderado
 WHERE ra.estado IN ('TARDANZA', 'INASISTENCIA');
 
 -- =====================================================
--- 13. BITACORA DE AUDITORIA (RF-12)
+-- 13. BITÁCORA DE AUDITORÍA (RF-12)
 -- =====================================================
 
 INSERT INTO auditoria (id_usuario, tipo_operacion, tabla_afectada, id_registro_afectado, detalle, direccion_ip, realizado_en)
@@ -400,7 +395,7 @@ VALUES
 COMMIT;
 
 -- =====================================================
--- COMPROBACION: cantidad de filas por tabla
+-- COMPROBACIÓN: cantidad de filas por tabla
 -- =====================================================
 
 SELECT 'rol' AS tabla, COUNT(*) AS filas FROM rol

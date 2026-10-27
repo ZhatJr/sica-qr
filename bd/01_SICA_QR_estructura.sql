@@ -1,17 +1,16 @@
 -- =====================================================
--- SICA-QR · Script de construccion de la base de datos
--- Motor: PostgreSQL 14 o superior
--- 17 tablas · Segundo avance del proyecto final
+-- SICA-QR · Estructura de la base de datos
+-- Motor: PostgreSQL 14 o superior · 17 tablas
 --
--- Correcciones aplicadas sobre el modelo preliminar:
---   1. Se separa capturado_en (hora real de lectura en el
---      dispositivo) de registrado_en (hora de insercion en
---      el servidor). La clasificacion usa capturado_en.
---   2. La unicidad de justificacion pasa a indice parcial,
---      de modo que una solicitud rechazada pueda volver a
---      presentarse.
---   3. Se agrega indice por fecha y hora de captura para
---      los reportes diarios.
+-- Notas de diseño:
+--   1. capturado_en (hora de lectura en el dispositivo) se
+--      separa de registrado_en (hora de inserción en el
+--      servidor). La clasificación usa capturado_en.
+--   2. La unicidad de justificación se controla con un
+--      índice parcial: una solicitud rechazada puede
+--      volver a presentarse.
+--   3. Índice por fecha y hora de captura para los
+--      reportes diarios.
 -- =====================================================
 
 BEGIN;
