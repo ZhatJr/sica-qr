@@ -1,0 +1,25 @@
+# ---------- Compilacion ----------
+target/
+*.class
+
+# ---------- Bitacora de auditoria (se genera al ejecutar) ----------
+logs/
+*.log
+
+# ---------- Editores ----------
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+
+# ---------- Sistema operativo ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- Contraseña local ----------
+config/
+bin/

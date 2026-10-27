@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Spring Boot 3.5: compatible con Java 17 hasta Java 25 -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.16</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>pe.edu.utp</groupId>
+    <artifactId>sica-qr</artifactId>
+    <version>0.3.0</version>
+    <name>SICA-QR</name>
+    <description>Sistema de Control de Asistencia Escolar mediante Codigo QR - I.E. N.o 14762</description>
+
+    <properties>
+        <!-- Se compila para Java 21: funciona en cualquier computadora con Java 21 o superior -->
+        <java.version>21</java.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- ============ Spring Boot ============ -->
+        <!-- API REST (controladores) y servidor web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- JPA: entidades y repositorios (patron DAO) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- ============ Base de datos ============ -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- ============ LIBRERIA 1: Apache POI ============ -->
+        <!-- Reporte de asistencia en Excel (RF-07) -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.4.1</version>
+        </dependency>
+
+        <!-- ============ LIBRERIA 2: Google Guava ============ -->
+        <!-- Cifrado SHA-256 de contrasenas y validacion de parametros -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>33.4.8-jre</version>
+        </dependency>
+
+        <!-- ============ LIBRERIA 3: Apache Commons Lang ============ -->
+        <!-- Validacion de textos: DNI, campos vacios, motivos -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.17.0</version>
+        </dependency>
+
+        <!-- ============ LIBRERIA 4: Logback ============ -->
+        <!-- Bitacora de auditoria en archivo (RF-12). Spring Boot ya la incluye;
+             se declara para dejar explicito su uso. -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+
+        <!-- ============ ZXing: generacion de codigos QR ============ -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.5.3</version>
+        </dependency>
+
+        <!-- ============ Pruebas (TDD) ============ -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
