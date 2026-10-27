@@ -12,13 +12,10 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
- * Inicio de sesion (RF-12, RNF-04).
- *
- * Medidas de seguridad:
- *  - La contrasena se compara cifrada (UtilClave, con Guava).
- *  - Mensaje generico: no dice si el usuario existe o no.
- *  - Al quinto intento fallido la cuenta se bloquea.
- *  - Cada intento queda en la bitacora de auditoria.
+ * Implementación del inicio de sesión (RF-12, RNF-04).
+ * Compara contraseñas cifradas, responde con un mensaje genérico ante
+ * credenciales inválidas, bloquea la cuenta al quinto intento fallido y
+ * registra cada intento en la bitácora.
  */
 @Service
 public class ServicioAutenticacionImpl implements ServicioAutenticacion {
@@ -36,11 +33,10 @@ public class ServicioAutenticacionImpl implements ServicioAutenticacion {
     }
 
     @Override
-    // noRollbackFor: aunque el login falle, el contador de intentos SI se guarda
+    // noRollbackFor: el contador de intentos se guarda aunque el acceso falle
     @Transactional(noRollbackFor = ReglaNegocioException.class)
     public UsuarioSesion iniciarSesion(String nombreUsuario, String clave, String ip) {
 
-        // Apache Commons: verifica que ninguno este vacio o en blanco
         if (StringUtils.isAnyBlank(nombreUsuario, clave)) {
             throw new ReglaNegocioException("Ingrese usuario y contraseña");
         }
@@ -65,7 +61,6 @@ public class ServicioAutenticacionImpl implements ServicioAutenticacion {
             throw new ReglaNegocioException(MENSAJE_GENERICO);
         }
 
-        // Acceso correcto: se reinicia el contador
         usuario.setIntentosFallidos(0);
         usuario.setUltimoAcceso(LocalDateTime.now());
         usuarioRepositorio.save(usuario);

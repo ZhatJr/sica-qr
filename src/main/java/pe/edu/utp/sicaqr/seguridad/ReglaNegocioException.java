@@ -1,8 +1,8 @@
 package pe.edu.utp.sicaqr.seguridad;
 
 /**
- * Error esperado por una regla del sistema: credencial revocada,
- * ingreso duplicado, dia no laborable, etc. La API responde 400.
+ * Incumplimiento de una regla de negocio (credencial revocada, ingreso duplicado,
+ * día no laborable, etc.). Se responde con HTTP 400.
  */
 public class ReglaNegocioException extends RuntimeException {
 

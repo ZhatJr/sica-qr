@@ -8,10 +8,8 @@ import java.util.List;
 
 /**
  * Consulta de justificaciones, alertas y notificaciones (V06, V07, V08).
- *
- * En este avance (40 %) estas pantallas solo MUESTRAN datos.
- * Registrar y aprobar justificaciones (RF-05, RF-06), generar alertas (RF-08)
- * y enviar notificaciones (RF-09) se implementan en el cuarto avance.
+ * Versión de solo lectura; el registro, la aprobación y el envío corresponden
+ * a la siguiente versión (RF-05, RF-06, RF-08, RF-09).
  */
 public interface ServicioSeguimiento {
 

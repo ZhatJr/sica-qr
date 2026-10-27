@@ -6,13 +6,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * MODELO (MVC) · Tabla registro_asistencia
- *
- * Cada ingreso de un estudiante (RF-01, RF-02).
- *
- * capturadoEn  = hora real en que se leyo el QR. Decide si es PUNTUAL o TARDANZA.
- * registradoEn = hora en que el servidor guardo la fila. Puede ser posterior si
- *                el registro se hizo sin conexion.
+ * Entidad de la tabla {@code registro_asistencia}.
+ * Registro de ingreso de un estudiante (RF-01, RF-02).
+ * capturadoEn es la hora de lectura en el dispositivo y determina el estado;
+ * registradoEn es la hora en que el servidor guardó el registro.
  */
 @Entity
 @Table(name = "registro_asistencia")
@@ -60,8 +57,6 @@ public class RegistroAsistencia {
 
     @Column(name = "observacion")
     private String observacion;
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdRegistro() { return idRegistro; }
     public void setIdRegistro(Long idRegistro) { this.idRegistro = idRegistro; }

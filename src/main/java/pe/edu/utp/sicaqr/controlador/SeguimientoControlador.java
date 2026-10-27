@@ -11,10 +11,7 @@ import pe.edu.utp.sicaqr.servicio.ServicioSeguimiento;
 
 import java.util.List;
 
-/**
- * CONTROLADOR (MVC) · Pantallas V06, V07 y V08.
- * En este avance solo consultan datos (GET). La logica completa va en el cuarto avance.
- */
+/** API de consulta de justificaciones (V07), alertas (V08) y notificaciones (V06). */
 @RestController
 @RequestMapping("/api")
 public class SeguimientoControlador {

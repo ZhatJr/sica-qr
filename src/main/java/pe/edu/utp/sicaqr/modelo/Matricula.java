@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 /**
- * MODELO (MVC) · Tabla matricula
- *
- * Une estudiante, seccion y periodo. La asistencia se registra sobre la matricula, no sobre el estudiante.
+ * Entidad de la tabla {@code matricula}.
+ * Matrícula de un estudiante en una sección y un periodo. La asistencia se asocia a la matrícula.
  */
 @Entity
 @Table(name = "matricula")
@@ -34,8 +33,6 @@ public class Matricula {
 
     @Column(name = "estado")
     private String estado = "ACTIVA";
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdMatricula() { return idMatricula; }
     public void setIdMatricula(Long idMatricula) { this.idMatricula = idMatricula; }

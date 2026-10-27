@@ -2,7 +2,7 @@ package pe.edu.utp.sicaqr.dto;
 
 import java.time.LocalDate;
 
-/** Una fila de la consulta de asistencia (V05) y del reporte Excel. */
+/** Fila de la consulta de asistencia (V05) y del reporte Excel. */
 public record FilaAsistencia(
         Long idRegistro,
         LocalDate fecha,

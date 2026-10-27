@@ -9,12 +9,7 @@ import pe.edu.utp.sicaqr.dto.UsuarioSesion;
 import pe.edu.utp.sicaqr.seguridad.ControlAcceso;
 import pe.edu.utp.sicaqr.servicio.ServicioAutenticacion;
 
-/**
- * CONTROLADOR (MVC) · Inicio y cierre de sesion. Pantalla V01 (RF-12).
- *
- * El controlador no contiene reglas: recibe la peticion, llama al
- * servicio y devuelve la respuesta.
- */
+/** API de inicio y cierre de sesión (V01, RF-12). */
 @RestController
 @RequestMapping("/api/auth")
 public class AutenticacionControlador {
@@ -23,7 +18,6 @@ public class AutenticacionControlador {
 
     private final ServicioAutenticacion servicioAutenticacion;
 
-    // DIP: se recibe la interfaz, no la implementacion
     public AutenticacionControlador(ServicioAutenticacion servicioAutenticacion) {
         this.servicioAutenticacion = servicioAutenticacion;
     }
@@ -35,8 +29,7 @@ public class AutenticacionControlador {
         UsuarioSesion usuario = servicioAutenticacion.iniciarSesion(
                 peticion.usuario(), peticion.clave(), request.getRemoteAddr());
 
-        // Seguridad: se descarta la sesion anterior y se crea una nueva
-        // (evita que alguien reutilice un identificador de sesion robado)
+        // Nueva sesión tras autenticarse (prevención de fijación de sesión)
         HttpSession anterior = request.getSession(false);
         if (anterior != null) {
             anterior.invalidate();
@@ -62,7 +55,7 @@ public class AutenticacionControlador {
         return ResponseEntity.noContent().build();
     }
 
-    /** GET /api/auth/sesion  -> quien esta conectado (las pantallas lo usan para armar el menu) */
+    /** GET /api/auth/sesion: usuario de la sesión actual. */
     @GetMapping("/sesion")
     public UsuarioSesion sesionActual(HttpSession sesion) {
         return ControlAcceso.usuarioActual(sesion);

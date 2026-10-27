@@ -7,10 +7,12 @@ import pe.edu.utp.sicaqr.modelo.PeriodoAcademico;
 
 import java.util.Optional;
 
-/** DAO · Acceso a la tabla configuracion. */
+/**
+ * Repositorio de la entidad {@link Configuracion}.
+ */
 @Repository
 public interface ConfiguracionRepositorio extends JpaRepository<Configuracion, Long> {
 
-    // Una sola configuracion activa por periodo (indice uq_configuracion_activa_periodo)
+    /** Configuración activa del periodo (solo puede haber una). */
     Optional<Configuracion> findByPeriodoAndActivoTrue(PeriodoAcademico periodo);
 }

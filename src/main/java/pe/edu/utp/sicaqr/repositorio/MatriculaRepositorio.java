@@ -8,11 +8,13 @@ import pe.edu.utp.sicaqr.modelo.PeriodoAcademico;
 
 import java.util.Optional;
 
-/** DAO · Acceso a la tabla matricula. */
+/**
+ * Repositorio de la entidad {@link Matricula}.
+ */
 @Repository
 public interface MatriculaRepositorio extends JpaRepository<Matricula, Long> {
 
-    // Matricula del estudiante en el periodo activo
+    /** Matrícula de un estudiante en un periodo, filtrada por estado. */
     Optional<Matricula> findByEstudianteAndPeriodoAndEstado(Estudiante estudiante,
                                                             PeriodoAcademico periodo,
                                                             String estado);

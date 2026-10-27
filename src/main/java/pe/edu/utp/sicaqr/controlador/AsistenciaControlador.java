@@ -18,9 +18,7 @@ import pe.edu.utp.sicaqr.servicio.ServicioAsistencia;
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- * CONTROLADOR (MVC) · Registro de ingreso (V04) y consulta de asistencia (V05).
- */
+/** API de registro de ingreso (V04) y consulta de asistencia (V05). */
 @RestController
 @RequestMapping("/api/asistencias")
 public class AsistenciaControlador {
@@ -43,7 +41,7 @@ public class AsistenciaControlador {
         return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
     }
 
-    /** POST /api/asistencias/dni  { "dni": "81234501" }   (RF-10, contingencia) */
+    /** POST /api/asistencias/dni  { "dni": "81234501" }   (RF-10) */
     @PostMapping("/dni")
     public ResponseEntity<ResultadoRegistro> registrarPorDni(@RequestBody RegistroDniPeticion peticion,
                                                              HttpSession sesion, HttpServletRequest request) {

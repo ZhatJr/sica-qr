@@ -1,13 +1,7 @@
 ###############################################################################
-#  SICA-QR · Pruebas de la API
-#
-#  Como usarlo:
-#   1. Instala en VS Code la extension "REST Client" (de Huachao Mao).
-#   2. Ejecuta el proyecto (SicaQrApplication).
-#   3. Haz clic en "Send Request" encima de cada peticion, EN ORDEN.
-#
-#  La sesion se guarda sola entre peticiones (cookie). Al iniciar sesion
-#  con otro usuario, la sesion anterior se reemplaza.
+#  SICA-QR · Pruebas de la API REST
+#  Requiere la extension REST Client de VS Code y la aplicacion en ejecucion.
+#  Las peticiones se ejecutan en orden; la sesion se mantiene por cookie.
 ###############################################################################
 
 @api = http://localhost:8080/api
@@ -45,7 +39,7 @@ Content-Type: application/json
 
 { "idEstudiante": {{estudiantes.response.body.$[19].idEstudiante}} }
 
-### 1.7 ERROR esperado: emitir otra cuando ya tiene una activa -> 400
+### 1.7 Error esperado: emitir otra cuando ya tiene una activa -> 400
 POST {{api}}/credenciales
 Content-Type: application/json
 
@@ -62,12 +56,11 @@ Content-Type: application/json
 
 { "usuario": "auxiliar", "clave": "auxiliar123" }
 
-### 2.2 ERROR esperado: el auxiliar no puede ver credenciales -> 403
+### 2.2 Error esperado: el auxiliar no puede ver credenciales -> 403
 GET {{api}}/estudiantes
 
 ### 2.3 Registrar ingreso por QR leido HOY a las 07:35 -> PUNTUAL
-# Como se envia una hora de captura anterior a la actual, el sistema lo
-# marca como SIN_CONEXION, pero lo clasifica con las 07:35: queda PUNTUAL.
+# Hora de captura anterior a la actual: origen SIN_CONEXION, clasificado con 07:35.
 POST {{api}}/asistencias/qr
 Content-Type: application/json
 
@@ -85,7 +78,7 @@ Content-Type: application/json
   "capturadoEn": "{{$localDatetime 'YYYY-MM-DD'}}T07:52:00"
 }
 
-### 2.5 ERROR esperado: escanear de nuevo al mismo estudiante -> 400 (duplicado)
+### 2.5 Error esperado: escanear de nuevo al mismo estudiante -> 400 (duplicado)
 POST {{api}}/asistencias/qr
 Content-Type: application/json
 
@@ -94,20 +87,20 @@ Content-Type: application/json
   "capturadoEn": "{{$localDatetime 'YYYY-MM-DD'}}T07:36:00"
 }
 
-### 2.6 ERROR esperado: un QR que no es de SICA-QR -> 400
+### 2.6 Error esperado: un QR que no es de SICA-QR -> 400
 POST {{api}}/asistencias/qr
 Content-Type: application/json
 
 { "token": "https://www.google.com" }
 
 ### 2.7 Contingencia: el estudiante olvido su credencial, se registra por DNI (RF-10)
-# Se usa la hora actual del servidor
+# Hora de captura: hora del servidor
 POST {{api}}/asistencias/dni
 Content-Type: application/json
 
 { "dni": "{{estudiantes.response.body.$[2].dni}}" }
 
-### 2.8 ERROR esperado: DNI con letras -> 400
+### 2.8 Error esperado: DNI con letras -> 400
 POST {{api}}/asistencias/dni
 Content-Type: application/json
 
@@ -136,23 +129,23 @@ GET {{api}}/asistencias
 ### 3.5 Asistencia de Primaria 5.° A en lo que va de octubre
 GET {{api}}/asistencias?idSeccion=11&desde=2026-10-01&hasta=2026-10-31
 
-### 3.6 ERROR esperado: fecha inicial mayor que la final -> 400
+### 3.6 Error esperado: fecha inicial mayor que la final -> 400
 GET {{api}}/asistencias?desde=2026-10-31&hasta=2026-10-01
 
 ### 3.7 Descargar el reporte en Excel (Apache POI)
-# En la respuesta, clic derecho -> "Save Response Body" para guardar el .xlsx
+# Respuesta: archivo .xlsx (Save Response Body)
 GET {{api}}/reportes/asistencia?desde=2026-10-01&hasta=2026-10-31
 
-### 3.8 Justificaciones (solo lectura en este avance)
+### 3.8 Justificaciones (solo lectura)
 GET {{api}}/justificaciones
 
-### 3.9 Alertas de acumulacion (solo lectura en este avance)
+### 3.9 Alertas de acumulacion (solo lectura)
 GET {{api}}/alertas
 
 ### 3.10 Cerrar sesion
 POST {{api}}/auth/logout
 
-### 3.11 ERROR esperado: sin sesion -> 401
+### 3.11 Error esperado: sin sesion -> 401
 GET {{api}}/panel/resumen
 
 
@@ -160,14 +153,14 @@ GET {{api}}/panel/resumen
 #  4. SEGURIDAD · Inicio de sesion
 ###############################################################################
 
-### 4.1 ERROR esperado: contrasena incorrecta -> mensaje generico
-# Al quinto intento fallido la cuenta queda bloqueada.
+### 4.1 Error esperado: contrasena incorrecta -> mensaje generico
+# Bloqueo de la cuenta al quinto intento fallido.
 POST {{api}}/auth/login
 Content-Type: application/json
 
 { "usuario": "direccion", "clave": "equivocada" }
 
-### 4.2 ERROR esperado: usuario inexistente -> el MISMO mensaje generico
+### 4.2 Error esperado: usuario inexistente -> mismo mensaje generico
 POST {{api}}/auth/login
 Content-Type: application/json
 

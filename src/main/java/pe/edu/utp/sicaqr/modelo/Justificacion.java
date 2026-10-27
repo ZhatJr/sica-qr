@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- * MODELO (MVC) · Tabla justificacion
- *
- * Sustento de una falta o tardanza. La registra el docente y la resuelve la direccion (RF-05, RF-06).
+ * Entidad de la tabla {@code justificacion}.
+ * Justificación de una inasistencia o tardanza (RF-05, RF-06).
  */
 @Entity
 @Table(name = "justificacion")
@@ -49,8 +48,6 @@ public class Justificacion {
 
     @Column(name = "comentario_revision")
     private String comentarioRevision;
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdJustificacion() { return idJustificacion; }
     public void setIdJustificacion(Long idJustificacion) { this.idJustificacion = idJustificacion; }

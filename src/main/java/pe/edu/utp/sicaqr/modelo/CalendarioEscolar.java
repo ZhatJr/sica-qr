@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 /**
- * MODELO (MVC) · Tabla calendario_escolar
- *
- * Dias laborables y no laborables del periodo. Evita que un feriado cuente como falta.
+ * Entidad de la tabla {@code calendario_escolar}.
+ * Día del periodo con su condición de laborable o no laborable.
  */
 @Entity
 @Table(name = "calendario_escolar")
@@ -29,8 +28,6 @@ public class CalendarioEscolar {
 
     @Column(name = "descripcion")
     private String descripcion;
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdCalendario() { return idCalendario; }
     public void setIdCalendario(Long idCalendario) { this.idCalendario = idCalendario; }

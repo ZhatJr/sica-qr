@@ -3,9 +3,8 @@ package pe.edu.utp.sicaqr.modelo;
 import jakarta.persistence.*;
 
 /**
- * MODELO (MVC) · Tabla apoderado
- *
- * Padre, madre o tutor que recibe las notificaciones (RF-09).
+ * Entidad de la tabla {@code apoderado}.
+ * Apoderado que recibe las notificaciones de asistencia (RF-09).
  */
 @Entity
 @Table(name = "apoderado")
@@ -36,8 +35,6 @@ public class Apoderado {
 
     @Column(name = "activo")
     private Boolean activo = true;
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdApoderado() { return idApoderado; }
     public void setIdApoderado(Long idApoderado) { this.idApoderado = idApoderado; }

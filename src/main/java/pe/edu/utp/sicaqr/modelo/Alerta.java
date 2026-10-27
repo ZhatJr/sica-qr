@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- * MODELO (MVC) · Tabla alerta
- *
- * Aviso interno cuando un estudiante supera el umbral de tardanzas o faltas (RF-08).
+ * Entidad de la tabla {@code alerta}.
+ * Alerta por acumulación de tardanzas o inasistencias (RF-08).
  */
 @Entity
 @Table(name = "alerta")
@@ -45,8 +44,6 @@ public class Alerta {
 
     @Column(name = "observacion")
     private String observacion;
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdAlerta() { return idAlerta; }
     public void setIdAlerta(Long idAlerta) { this.idAlerta = idAlerta; }

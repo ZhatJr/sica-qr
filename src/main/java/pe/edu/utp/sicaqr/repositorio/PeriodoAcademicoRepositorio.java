@@ -6,10 +6,12 @@ import pe.edu.utp.sicaqr.modelo.PeriodoAcademico;
 
 import java.util.Optional;
 
-/** DAO · Acceso a la tabla periodo_academico. */
+/**
+ * Repositorio de la entidad {@link PeriodoAcademico}.
+ */
 @Repository
 public interface PeriodoAcademicoRepositorio extends JpaRepository<PeriodoAcademico, Long> {
 
-    // Solo puede haber un periodo ACTIVO (indice uq_periodo_activo)
+    /** Devuelve el periodo con el estado indicado (solo puede haber uno ACTIVO). */
     Optional<PeriodoAcademico> findByEstado(String estado);
 }

@@ -11,7 +11,7 @@ import pe.edu.utp.sicaqr.servicio.ServicioAsistencia;
 import java.time.LocalDate;
 import java.util.List;
 
-/** CONTROLADOR (MVC) · Indicadores del panel principal (V02) y lista de secciones. */
+/** API de indicadores del panel principal (V02) y catálogo de secciones. */
 @RestController
 @RequestMapping("/api")
 public class PanelControlador {
@@ -31,7 +31,7 @@ public class PanelControlador {
         return servicioAsistencia.resumenDelDia(fecha);
     }
 
-    /** GET /api/secciones   (para los filtros de las pantallas) */
+    /** GET /api/secciones */
     @GetMapping("/secciones")
     public List<SeccionDto> secciones(HttpSession sesion) {
         ControlAcceso.usuarioActual(sesion);

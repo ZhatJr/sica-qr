@@ -5,8 +5,7 @@ import org.springframework.stereotype.Repository;
 import pe.edu.utp.sicaqr.modelo.Auditoria;
 
 /**
- * DAO · Acceso a la tabla de Auditoria.
- * JpaRepository ya trae save, findById, findAll y count.
+ * Repositorio de la entidad {@link Auditoria}.
  */
 @Repository
 public interface AuditoriaRepositorio extends JpaRepository<Auditoria, Long> {

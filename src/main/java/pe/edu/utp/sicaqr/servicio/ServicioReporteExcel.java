@@ -19,13 +19,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * LIBRERIA APACHE POI · Reporte de asistencia en Excel (RF-07).
- *
- * Arma un archivo .xlsx con:
- *   - titulo, institucion y rango de fechas
- *   - totales de puntuales, tardanzas e inasistencias
- *   - el detalle de registros, con el estado en color
- *     (mismo color que en las pantallas: buena practica de consistencia)
+ * Reporte de asistencia en formato Excel (.xlsx) con Apache POI (RF-07).
+ * Incluye el rango de fechas, los totales por estado y el detalle de registros
+ * con el estado resaltado en color.
  */
 @Service
 public class ServicioReporteExcel implements ServicioReporte {
@@ -38,7 +34,6 @@ public class ServicioReporteExcel implements ServicioReporte {
     public byte[] generarReporteAsistencia(List<FilaAsistencia> filas, LocalDate desde, LocalDate hasta)
             throws IOException {
 
-        // try-with-resources: el libro se cierra solo al terminar
         try (Workbook libro = new XSSFWorkbook();
              ByteArrayOutputStream salida = new ByteArrayOutputStream()) {
 
@@ -86,7 +81,7 @@ public class ServicioReporteExcel implements ServicioReporte {
                     celda.setCellValue(valores[i]);
                     celda.setCellStyle(normal);
                 }
-                // La columna Estado lleva el color del estado
+                // Color de la columna Estado
                 CellStyle color = switch (f.estado()) {
                     case "PUNTUAL" -> puntual;
                     case "TARDANZA" -> tardanza;
@@ -114,7 +109,6 @@ public class ServicioReporteExcel implements ServicioReporte {
         return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     }
 
-    // ---------------- Metodos de apoyo ----------------
 
     private void escribir(Sheet hoja, int fila, int columna, String texto, CellStyle estilo) {
         Row r = hoja.getRow(fila) != null ? hoja.getRow(fila) : hoja.createRow(fila);

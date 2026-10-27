@@ -6,9 +6,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
- * MODELO (MVC) · Tabla configuracion
- *
- * Reglas de horario del periodo: entrada, tolerancia y corte (RF-02).
+ * Entidad de la tabla {@code configuracion}.
+ * Parámetros de horario del periodo: entrada, tolerancia, corte y umbrales (RF-02).
  */
 @Entity
 @Table(name = "configuracion")
@@ -56,8 +55,6 @@ public class Configuracion {
 
     @Column(name = "creado_en")
     private LocalDateTime creadoEn = LocalDateTime.now();
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdConfiguracion() { return idConfiguracion; }
     public void setIdConfiguracion(Long idConfiguracion) { this.idConfiguracion = idConfiguracion; }

@@ -3,9 +3,8 @@ package pe.edu.utp.sicaqr.modelo;
 import jakarta.persistence.*;
 
 /**
- * MODELO (MVC) · Tabla grado
- *
- * Grados de cada nivel educativo: inicial, primaria y secundaria.
+ * Entidad de la tabla {@code grado}.
+ * Grado de un nivel educativo: inicial, primaria o secundaria.
  */
 @Entity
 @Table(name = "grado")
@@ -24,8 +23,6 @@ public class Grado {
 
     @Column(name = "activo")
     private Boolean activo = true;
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdGrado() { return idGrado; }
     public void setIdGrado(Long idGrado) { this.idGrado = idGrado; }

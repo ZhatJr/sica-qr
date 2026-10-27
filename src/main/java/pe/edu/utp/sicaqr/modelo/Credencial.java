@@ -5,9 +5,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * MODELO (MVC) · Tabla credencial
- *
- * Credencial QR del estudiante. El token es un UUID aleatorio sin datos personales (RF-11, Ley N.o 29733).
+ * Entidad de la tabla {@code credencial}.
+ * Credencial QR de un estudiante. El token es un UUID aleatorio sin datos personales (RF-11).
  */
 @Entity
 @Table(name = "credencial")
@@ -47,8 +46,6 @@ public class Credencial {
 
     @Column(name = "motivo_revocacion")
     private String motivoRevocacion;
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdCredencial() { return idCredencial; }
     public void setIdCredencial(Long idCredencial) { this.idCredencial = idCredencial; }

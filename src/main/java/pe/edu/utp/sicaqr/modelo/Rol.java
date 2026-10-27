@@ -3,9 +3,8 @@ package pe.edu.utp.sicaqr.modelo;
 import jakarta.persistence.*;
 
 /**
- * MODELO (MVC) · Tabla rol
- *
- * Tipos de usuario del sistema: ADMINISTRADOR, AUXILIAR, DOCENTE y DIRECCION (RF-12).
+ * Entidad de la tabla {@code rol}.
+ * Rol de usuario: ADMINISTRADOR, AUXILIAR, DOCENTE o DIRECCION (RF-12).
  */
 @Entity
 @Table(name = "rol")
@@ -24,8 +23,6 @@ public class Rol {
 
     @Column(name = "activo")
     private Boolean activo = true;
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdRol() { return idRol; }
     public void setIdRol(Long idRol) { this.idRol = idRol; }

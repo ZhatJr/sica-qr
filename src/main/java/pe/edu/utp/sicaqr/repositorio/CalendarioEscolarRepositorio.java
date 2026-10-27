@@ -8,7 +8,9 @@ import pe.edu.utp.sicaqr.modelo.PeriodoAcademico;
 import java.time.LocalDate;
 import java.util.Optional;
 
-/** DAO · Acceso a la tabla calendario_escolar. */
+/**
+ * Repositorio de la entidad {@link CalendarioEscolar}.
+ */
 @Repository
 public interface CalendarioEscolarRepositorio extends JpaRepository<CalendarioEscolar, Long> {
 

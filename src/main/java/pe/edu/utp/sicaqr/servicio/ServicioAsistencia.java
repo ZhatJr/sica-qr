@@ -11,19 +11,21 @@ import pe.edu.utp.sicaqr.dto.UsuarioSesion;
 import java.time.LocalDate;
 import java.util.List;
 
-/** SOLID · Segregacion de interfaces: solo operaciones de asistencia. */
+/** Registro y consulta de asistencia. */
 public interface ServicioAsistencia {
 
-    /** RF-01 y RF-02: registra el ingreso leyendo el QR y lo clasifica. */
+    /** Registra un ingreso a partir del código QR y lo clasifica (RF-01, RF-02). */
     ResultadoRegistro registrarPorQr(RegistroQrPeticion peticion, UsuarioSesion usuario, String ip);
 
-    /** RF-10: registro manual de contingencia por DNI. */
+    /** Registra un ingreso manual por DNI (RF-10). */
     ResultadoRegistro registrarPorDni(RegistroDniPeticion peticion, UsuarioSesion usuario, String ip);
 
-    /** RF-04: consulta por seccion (opcional) y rango de fechas. */
+    /** Registros de un rango de fechas, opcionalmente filtrados por sección (RF-04). */
     List<FilaAsistencia> consultar(Long idSeccion, LocalDate desde, LocalDate hasta);
 
+    /** Indicadores de asistencia de una fecha. */
     ResumenDia resumenDelDia(LocalDate fecha);
 
+    /** Secciones activas. */
     List<SeccionDto> listarSecciones();
 }

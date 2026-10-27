@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- * MODELO (MVC) · Tabla usuario
- *
- * Cuentas del personal de la institucion. Las crea el administrador; nadie se registra por su cuenta (RF-12).
+ * Entidad de la tabla {@code usuario}.
+ * Cuenta de acceso del personal de la institución (RF-12).
  */
 @Entity
 @Table(name = "usuario")
@@ -47,8 +46,6 @@ public class Usuario {
 
     @Column(name = "creado_en")
     private LocalDateTime creadoEn = LocalDateTime.now();
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdUsuario() { return idUsuario; }
     public void setIdUsuario(Long idUsuario) { this.idUsuario = idUsuario; }

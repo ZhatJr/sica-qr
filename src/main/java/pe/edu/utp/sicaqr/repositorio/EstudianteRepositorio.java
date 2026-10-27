@@ -7,11 +7,13 @@ import pe.edu.utp.sicaqr.modelo.Estudiante;
 import java.util.List;
 import java.util.Optional;
 
-/** DAO · Acceso a la tabla estudiante. */
+/**
+ * Repositorio de la entidad {@link Estudiante}.
+ */
 @Repository
 public interface EstudianteRepositorio extends JpaRepository<Estudiante, Long> {
 
-    // Registro manual de contingencia por DNI (RF-10)
+    /** Busca un estudiante por su DNI (registro de contingencia, RF-10). */
     Optional<Estudiante> findByDni(String dni);
 
     List<Estudiante> findByActivoTrueOrderByApellidosAscNombresAsc();

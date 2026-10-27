@@ -6,12 +6,9 @@ import pe.edu.utp.sicaqr.dto.UsuarioSesion;
 import java.util.Arrays;
 
 /**
- * SEGURIDAD · Control de acceso por rol (RF-12).
- *
- * Cada controlador llama a exigirRol(...) al inicio. Si no hay sesion
- * responde 401; si el rol no esta permitido responde 403.
- * La verificacion se hace en el servidor: ocultar un boton en la
- * pantalla no basta, porque cualquiera puede llamar a la API directamente.
+ * Control de acceso por rol (RF-12).
+ * Los controladores lo invocan al inicio de cada operación: sin sesión se
+ * responde 401 y con un rol no autorizado, 403.
  */
 public final class ControlAcceso {
 
@@ -20,7 +17,11 @@ public final class ControlAcceso {
     private ControlAcceso() {
     }
 
-    /** Devuelve el usuario de la sesion o lanza 401. */
+    /**
+     * Devuelve el usuario autenticado.
+     *
+     * @throws NoAutenticadoException si no hay sesión
+     */
     public static UsuarioSesion usuarioActual(HttpSession sesion) {
         Object usuario = sesion.getAttribute(CLAVE_SESION);
         if (usuario == null) {
@@ -29,7 +30,12 @@ public final class ControlAcceso {
         return (UsuarioSesion) usuario;
     }
 
-    /** Verifica que el usuario tenga alguno de los roles indicados. */
+    /**
+     * Verifica que el usuario tenga alguno de los roles indicados.
+     *
+     * @return el usuario autenticado
+     * @throws AccesoDenegadoException si el rol no está autorizado
+     */
     public static UsuarioSesion exigirRol(HttpSession sesion, String... rolesPermitidos) {
         UsuarioSesion usuario = usuarioActual(sesion);
         if (!Arrays.asList(rolesPermitidos).contains(usuario.rol())) {

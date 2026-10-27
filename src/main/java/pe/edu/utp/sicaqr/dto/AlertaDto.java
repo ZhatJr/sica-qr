@@ -2,7 +2,7 @@ package pe.edu.utp.sicaqr.dto;
 
 import java.time.LocalDateTime;
 
-/** Fila de alertas de acumulacion (V08). */
+/** Alerta de acumulación (V08). */
 public record AlertaDto(
         Long idAlerta,
         String estudiante,

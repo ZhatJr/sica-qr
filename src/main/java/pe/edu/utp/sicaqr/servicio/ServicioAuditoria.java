@@ -13,18 +13,14 @@ import pe.edu.utp.sicaqr.repositorio.UsuarioRepositorio;
 import java.util.Map;
 
 /**
- * BITACORA DE AUDITORIA (RF-12) · LIBRERIA LOGBACK
- *
- * Cada accion importante se guarda en dos lugares:
- *   1. La tabla auditoria de la base de datos (para consultarla).
- *   2. El archivo logs/auditoria.log, escrito por Logback (respaldo en texto).
- *
- * SRP: esta clase solo registra; no decide nada del negocio.
+ * Bitácora de auditoría (RF-12).
+ * Cada operación se guarda en la tabla {@code auditoria} y en el archivo
+ * {@code logs/auditoria.log} mediante Logback.
  */
 @Service
 public class ServicioAuditoria {
 
-    // Logback: logger con nombre propio, configurado en logback-spring.xml
+    /** Logger configurado en logback-spring.xml con salida a logs/auditoria.log. */
     private static final Logger bitacora = LoggerFactory.getLogger("AUDITORIA");
 
     private final AuditoriaRepositorio auditoriaRepositorio;
@@ -40,8 +36,14 @@ public class ServicioAuditoria {
     }
 
     /**
-     * @param operacion LOGIN, LOGOUT, INSERT, UPDATE, DELETE o EXPORT
-     * @param detalle   datos del cambio; se guarda como JSON en la columna JSONB
+     * Registra una operación en la bitácora.
+     *
+     * @param idUsuario  usuario que realiza la operación
+     * @param operacion  LOGIN, LOGOUT, INSERT, UPDATE, DELETE o EXPORT
+     * @param tabla      tabla afectada
+     * @param idAfectado identificador del registro afectado, si corresponde
+     * @param detalle    datos de la operación, almacenados como JSON
+     * @param ip         dirección IP de origen
      */
     @Transactional
     public void registrar(Long idUsuario, String operacion, String tabla,

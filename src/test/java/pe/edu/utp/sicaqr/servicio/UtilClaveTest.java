@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/** TDD · Pruebas del cifrado de contrasenas con Google Guava (RNF-04). */
+/** Pruebas unitarias de {@link UtilClave} (RNF-04). */
 class UtilClaveTest {
 
     @Test
@@ -19,7 +19,7 @@ class UtilClaveTest {
     @Test
     @DisplayName("El hash coincide con el guardado en el script de datos de prueba")
     void coincideConLaBaseDeDatos() {
-        // Valor de la tabla usuario para 'admin' en 02_SICA_QR_datos_prueba.sql
+        // Hash almacenado para 'admin' en 02_SICA_QR_datos_prueba.sql
         assertEquals("374ca1c6dcf652ef60b85fd5266c6a578c471362b27e8f2b978f73c786c1587d",
                 UtilClave.cifrar("admin123"));
     }

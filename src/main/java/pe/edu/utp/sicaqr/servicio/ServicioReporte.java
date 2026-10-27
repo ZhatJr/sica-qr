@@ -7,18 +7,25 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * SOLID · Abierto/Cerrado (OCP).
- *
- * Hoy existe una implementacion: ServicioReporteExcel (Apache POI).
- * Si se pide el reporte en PDF (el informe menciona iText), se crea otra
- * clase que implemente esta interfaz, SIN modificar la de Excel que ya funciona.
+ * Generación del reporte de asistencia (RF-07).
+ * Cada formato de salida es una implementación de esta interfaz.
  */
 public interface ServicioReporte {
 
+    /**
+     * Genera el archivo del reporte.
+     *
+     * @param filas registros a incluir
+     * @param desde fecha inicial del rango
+     * @param hasta fecha final del rango
+     * @return contenido del archivo
+     */
     byte[] generarReporteAsistencia(List<FilaAsistencia> filas, LocalDate desde, LocalDate hasta)
             throws IOException;
 
+    /** Extensión del archivo generado. */
     String getExtension();
 
+    /** Tipo MIME del archivo generado. */
     String getTipoContenido();
 }

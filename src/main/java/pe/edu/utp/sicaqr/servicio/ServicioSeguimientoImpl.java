@@ -12,6 +12,7 @@ import pe.edu.utp.sicaqr.repositorio.NotificacionRepositorio;
 
 import java.util.List;
 
+/** Implementación de la consulta de seguimiento. */
 @Service
 public class ServicioSeguimientoImpl implements ServicioSeguimiento {
 

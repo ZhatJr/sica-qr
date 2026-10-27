@@ -6,7 +6,9 @@ import pe.edu.utp.sicaqr.modelo.Alerta;
 
 import java.util.List;
 
-/** DAO · Acceso a la tabla alerta. */
+/**
+ * Repositorio de la entidad {@link Alerta}.
+ */
 @Repository
 public interface AlertaRepositorio extends JpaRepository<Alerta, Long> {
 

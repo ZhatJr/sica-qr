@@ -32,11 +32,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Gestion de credenciales QR (RF-11).
- *
- * El QR contiene solo el token (un UUID aleatorio). No lleva nombre ni DNI:
- * si alguien lo lee con su celular, solo ve un codigo sin significado
- * (Ley N.o 29733 de Proteccion de Datos Personales).
+ * Implementación de la gestión de credenciales QR (RF-11).
+ * El código QR contiene solo el token UUID, sin datos personales del
+ * estudiante (Ley N.° 29733).
  */
 @Service
 public class ServicioCredencialImpl implements ServicioCredencial {
@@ -85,7 +83,7 @@ public class ServicioCredencialImpl implements ServicioCredencial {
         Estudiante estudiante = estudianteRepositorio.findById(idEstudiante)
                 .orElseThrow(() -> new ReglaNegocioException("El estudiante no existe"));
 
-        // Solo una credencial activa por estudiante (indice uq_credencial_activa_estudiante)
+        // Una sola credencial activa por estudiante (uq_credencial_activa_estudiante)
         if (credencialRepositorio.findByEstudianteAndEstado(estudiante, "ACTIVA").isPresent()) {
             throw new ReglaNegocioException(
                     "El estudiante ya tiene una credencial activa. Revóquela antes de emitir otra.");
@@ -111,12 +109,11 @@ public class ServicioCredencialImpl implements ServicioCredencial {
         if (!"ACTIVA".equals(credencial.getEstado())) {
             throw new ReglaNegocioException("La credencial ya no está activa");
         }
-        // Apache Commons: valida que el motivo no este vacio
         if (StringUtils.isBlank(motivo)) {
             throw new ReglaNegocioException("Indique el motivo de la revocación");
         }
 
-        // No se borra: se cambia el estado (las bajas se manejan por estado, apartado 3.5 del informe)
+        // Baja lógica: se cambia el estado, no se elimina el registro
         credencial.setEstado("REVOCADA");
         credencial.setRevocadaEn(LocalDateTime.now());
         credencial.setMotivoRevocacion(StringUtils.left(motivo.trim(), 200));
@@ -128,7 +125,6 @@ public class ServicioCredencialImpl implements ServicioCredencial {
                         "motivo", credencial.getMotivoRevocacion()), ip);
     }
 
-    /** Genera la imagen PNG del codigo QR con la libreria ZXing. */
     @Override
     @Transactional(readOnly = true)
     public byte[] generarImagenQr(String token) {
@@ -138,7 +134,6 @@ public class ServicioCredencialImpl implements ServicioCredencial {
         } catch (IllegalArgumentException e) {
             throw new ReglaNegocioException("Token no válido");
         }
-        // Solo se dibujan QR de credenciales activas
         credencialRepositorio.findByTokenUuidAndEstado(uuid, "ACTIVA")
                 .orElseThrow(() -> new ReglaNegocioException("La credencial no está activa"));
 

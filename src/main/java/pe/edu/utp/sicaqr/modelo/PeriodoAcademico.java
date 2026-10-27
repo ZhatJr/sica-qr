@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 /**
- * MODELO (MVC) · Tabla periodo_academico
- *
- * Ano escolar. Solo puede haber un periodo ACTIVO a la vez.
+ * Entidad de la tabla {@code periodo_academico}.
+ * Año escolar. Solo un periodo puede estar en estado ACTIVO.
  */
 @Entity
 @Table(name = "periodo_academico")
@@ -28,8 +27,6 @@ public class PeriodoAcademico {
 
     @Column(name = "estado")
     private String estado = "PLANIFICADO";
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdPeriodo() { return idPeriodo; }
     public void setIdPeriodo(Long idPeriodo) { this.idPeriodo = idPeriodo; }
