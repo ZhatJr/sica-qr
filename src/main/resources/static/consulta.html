@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SICA-QR · Consulta de asistencia</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<div class="app">
+  <aside class="menu" id="menu"></aside>
+
+  <!-- V05 · Consulta de asistencia (RF-04, RF-07) -->
+  <main class="contenido">
+    <header class="cabecera">
+      <div>
+        <h1>Consulta de asistencia</h1>
+        <p id="subtitulo">&nbsp;</p>
+      </div>
+      <div class="exportar">
+        <button class="boton-secundario" id="boton-excel" hidden>Descargar Excel</button>
+      </div>
+    </header>
+
+    <div class="filtros">
+      <label>Sección
+        <select id="seccion"></select>
+      </label>
+      <label>Desde
+        <input type="date" id="desde">
+      </label>
+      <label>Hasta
+        <input type="date" id="hasta">
+      </label>
+      <label>Estado
+        <select id="estado">
+          <option value="">Todos</option>
+          <option value="PUNTUAL">Puntual</option>
+          <option value="TARDANZA">Tardanza</option>
+          <option value="INASISTENCIA">Inasistencia</option>
+        </select>
+      </label>
+      <label>Estudiante
+        <input type="text" id="buscar" placeholder="Nombre o código">
+      </label>
+      <button class="boton-principal" id="boton-buscar">Buscar</button>
+    </div>
+
+    <div class="mensaje-error" id="error" hidden></div>
+
+    <div class="resumen">
+      <div class="dato"><strong id="total">–</strong><span>Registros</span></div>
+      <div class="dato"><strong class="c-puntual" id="puntuales">–</strong><span>Puntuales</span></div>
+      <div class="dato"><strong class="c-tardanza" id="tardanzas">–</strong><span>Tardanzas</span></div>
+      <div class="dato"><strong class="c-falta" id="faltas">–</strong><span>Inasistencias</span></div>
+    </div>
+
+    <div class="envoltura-tabla">
+      <table class="tabla">
+        <thead>
+          <tr><th>Fecha</th><th>Estudiante</th><th>Sección</th><th>Hora</th><th>Estado</th><th>Método</th><th>Origen</th></tr>
+        </thead>
+        <tbody id="filas"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script src="js/comun.js"></script>
+<script src="js/consulta.js"></script>
+</body>
+</html>
