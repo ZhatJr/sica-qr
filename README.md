@@ -20,7 +20,7 @@ Docente: Mg. Ing. Richard Doann Asencios Vilchez
 | RF-04 | Consulta de asistencia por sección y fechas | Implementado |
 | RF-10 | Registro manual de contingencia por DNI | Implementado |
 | RF-05, RF-06, RF-08, RF-09 | Justificaciones, alertas y notificaciones | Solo consulta; lógica en el cuarto avance |
-| RF-03 | Registro sin conexión | Parcial: el servidor ya separa la hora de captura de la de registro |
+| RF-03 | Registro sin conexión | Implementado: la pantalla guarda la lectura en el equipo y la reenvía con su hora de captura |
 
 ## 2. Tecnologías
 
@@ -29,10 +29,30 @@ Docente: Mg. Ing. Richard Doann Asencios Vilchez
 | Backend y API REST | Java 21+ · Spring Boot 3.5 |
 | Base de datos | PostgreSQL (17 tablas, script del segundo avance) |
 | Interfaz | HTML, CSS y JavaScript |
-| Códigos QR | ZXing |
+| Códigos QR | ZXing (generación en el servidor) · html5-qrcode (lectura con la cámara) |
 | Librerías del curso | Apache POI · Google Guava · Apache Commons Lang · Logback |
 
-## 3. Arquitectura
+## 3. Pantallas (capa Vista)
+
+Están en `src/main/resources/static`. Cada pantalla es un HTML con su archivo JavaScript,
+que llama a la API REST. El menú se arma según el rol de la sesión (TABLA 25 del informe).
+
+| Ventana | Archivo | Rol | Qué hace |
+|---|---|---|---|
+| V01 Inicio de sesión | `index.html` | Todos | Login con mensaje genérico y bloqueo al quinto intento |
+| V02 Panel principal | `panel.html` | Todos | Indicadores del día, accesos según el rol y asistencia por sección |
+| V03 Credenciales QR | `credenciales.html` | Administrador | Emitir, revocar e imprimir credenciales |
+| V04 Registro de ingreso | `registro.html` | Auxiliar | Lectura del QR con la cámara, registro por DNI y cola sin conexión |
+| V05 Consulta de asistencia | `consulta.html` | Auxiliar, Docente, Dirección | Filtros por sección, fechas y estado; descarga en Excel |
+| V06 Notificaciones | `notificaciones.html` | Administrador, Auxiliar | Estado de los avisos a los apoderados (consulta) |
+| V07 Justificaciones | `justificaciones.html` | Docente, Dirección | Bandeja de solicitudes (consulta) |
+| V08 Alertas | `alertas.html` | Docente, Dirección | Estudiantes que superaron el umbral (consulta) |
+
+**Seguridad en la vista:** todo dato que viene de la base se escapa antes de mostrarse
+(función `esc()` en `js/comun.js`), lo que evita ataques XSS. Ocultar una opción del menú
+no basta: el servidor vuelve a verificar el rol en cada petición.
+
+## 4. Arquitectura
 
 El sistema aplica el patrón **MVC** sobre una arquitectura en capas:
 
@@ -87,7 +107,7 @@ public interface CredencialRepositorio extends JpaRepository<Credencial, Long> {
 
 El servicio no escribe SQL: le pide los datos a la interfaz y Spring genera la consulta.
 
-## 4. Librerías Java
+## 5. Librerías Java
 
 | Librería | Uso | Archivo |
 |---|---|---|
@@ -96,7 +116,7 @@ El servicio no escribe SQL: le pide los datos a la interfaz y Spring genera la c
 | **Apache Commons Lang** | `StringUtils` para validar DNI, campos vacíos y motivos | `ServicioAsistenciaImpl.java`, `ServicioAutenticacionImpl.java`, `ServicioCredencialImpl.java` |
 | **Logback** | Bitácora de auditoría en `logs/auditoria.log`, un archivo por día | `logback-spring.xml`, `ServicioAuditoria.java` |
 
-## 5. Seguridad
+## 6. Seguridad
 
 | Riesgo | Medida |
 |---|---|
@@ -108,10 +128,11 @@ El servicio no escribe SQL: le pide los datos a la interfaz y Spring genera la c
 | Credencial perdida | Se revoca y deja de funcionar al instante |
 | SQL Injection | No se arma SQL con texto: los repositorios usan consultas con parámetros |
 | Robo de sesión | Se crea una sesión nueva al iniciar sesión; expira a los 30 minutos |
+| Contraseña de la BD publicada en GitHub | Va en `config/application.properties`, que está en `.gitignore` |
 | Errores que revelan la base de datos | El usuario recibe un mensaje genérico; el detalle solo va al log |
 | Falta de trazabilidad | Toda acción importante queda en la tabla `auditoria` y en `logs/auditoria.log` |
 
-## 6. API REST
+## 7. API REST
 
 | Método | Ruta | Rol | RF |
 |---|---|---|---|
@@ -136,17 +157,21 @@ No hay rutas DELETE: en SICA-QR nada se borra físicamente. Las bajas se hacen
 cambiando el estado (por ejemplo, la credencial pasa a REVOCADA), para conservar
 el historial.
 
-## 7. Cómo ejecutarlo
+## 8. Cómo ejecutarlo
 
 **Requisitos:** Java 21 o superior, PostgreSQL y VS Code con *Extension Pack for Java*.
 
 1. **Base de datos.** Seguir `bd/LEEME_instalacion.txt`: crear la base `sica_qr` y ejecutar
    `01_SICA_QR_estructura.sql` y luego `02_SICA_QR_datos_prueba.sql`.
-2. **Contraseña.** En `src/main/resources/application.properties`, escribir la contraseña de
-   PostgreSQL en `spring.datasource.password`.
+2. **Contraseña.** Crear en la raíz del proyecto (junto a `pom.xml`) la carpeta `config` y,
+   dentro, un archivo `application.properties` con una sola línea:
+   `spring.datasource.password=TU_CONTRASENA`.
+   Spring Boot lo lee automáticamente. Git ignora la carpeta `config/`, así la
+   contraseña real nunca se sube a GitHub.
 3. **Ejecutar.** Abrir `SicaQrApplication.java` y hacer clic en **Run**. Esperar el mensaje
    `Started SicaQrApplication`.
-4. **Probar.** Abrir `pruebas-api.http` (extensión *REST Client*) y enviar las peticiones en orden.
+4. **Usar.** Abrir `http://localhost:8080` e iniciar sesión con un usuario de prueba.
+5. **Probar la API.** Abrir `pruebas-api.http` (extensión *REST Client*) y enviar las peticiones en orden.
 
 ### Usuarios de prueba
 
@@ -160,7 +185,7 @@ el historial.
 > El registro de ingreso solo funciona en días de clases. Un sábado, domingo o feriado
 > el sistema responde que no es día de clases, porque así lo indica el calendario escolar.
 
-## 8. Pruebas unitarias (TDD)
+## 9. Pruebas unitarias (TDD)
 
 ```
 mvn test
@@ -171,10 +196,10 @@ mvn test
 | `ClasificadorAsistenciaTest` | 07:35 puntual, 07:40 puntual, 07:41 tardanza, 09:00 inasistencia, y que un QR leído a las 07:20 y sincronizado a las 09:30 quede **puntual** |
 | `UtilClaveTest` | La contraseña no se guarda en texto plano y el hash de Java coincide con el del script SQL |
 
-## 9. Ramas
+## 10. Ramas
 
 | Rama | Contenido |
 |---|---|
 | `main` | Versión integrada |
 | `backend` | `modelo`, `repositorio`, `servicio`, `controlador`, base de datos y pruebas |
-| `frontend` | Pantallas en `src/main/resources/static` |
+| `frontend` | Pantallas en `src/main/resources/static` (HTML, CSS y JavaScript) |
