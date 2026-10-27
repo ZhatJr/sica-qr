@@ -6,7 +6,9 @@ import pe.edu.utp.sicaqr.modelo.Justificacion;
 
 import java.util.List;
 
-/** DAO · Acceso a la tabla justificacion. */
+/**
+ * Repositorio de la entidad {@link Justificacion}.
+ */
 @Repository
 public interface JustificacionRepositorio extends JpaRepository<Justificacion, Long> {
 

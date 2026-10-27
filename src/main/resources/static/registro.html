@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SICA-QR · Registro de ingreso</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<div class="app">
+  <aside class="menu" id="menu"></aside>
+
+  <!-- V04 · Registro de ingreso (RF-01, RF-02, RF-03, RF-10) -->
+  <main class="contenido">
+    <header class="cabecera">
+      <div>
+        <h1>Registro de ingreso</h1>
+        <p id="reloj">&nbsp;</p>
+      </div>
+      <span class="pastilla-conexion" id="conexion">Conectado</span>
+    </header>
+
+    <div class="registro">
+      <!-- Columna izquierda: lectura -->
+      <div class="tarjeta">
+        <div class="pestanas">
+          <button class="activo" data-pestana="qr">Escanear QR</button>
+          <button data-pestana="dni">Buscar por DNI</button>
+        </div>
+
+        <div class="cuerpo-tarjeta" id="pestana-qr">
+          <div id="lector">La cámara está apagada</div>
+          <div class="fila-botones">
+            <button class="boton-principal" id="boton-camara">Activar cámara</button>
+            <button class="boton-secundario" id="boton-detener" disabled>Detener</button>
+          </div>
+
+          <div class="campo">
+            <label for="token">¿Sin cámara? Código de la credencial</label>
+            <input id="token" type="text" placeholder="Pegue o escriba el código leído">
+            <p class="ayuda">Un lector de QR USB también escribe aquí el código y presiona Enter.</p>
+          </div>
+          <div class="fila-botones">
+            <button class="boton-secundario" id="boton-token">Registrar código</button>
+          </div>
+        </div>
+
+        <div class="cuerpo-tarjeta" id="pestana-dni" hidden>
+          <p class="canal">Contingencia cuando el estudiante no porta su credencial (RF-10).
+             El registro queda marcado como MANUAL en la bitácora.</p>
+          <div class="campo">
+            <label for="dni">DNI del estudiante</label>
+            <input id="dni" type="text" inputmode="numeric" maxlength="8" placeholder="8 dígitos">
+          </div>
+          <div class="campo">
+            <label for="observacion">Observación (opcional)</label>
+            <input id="observacion" type="text" maxlength="250" placeholder="Ej.: olvidó su credencial en casa">
+          </div>
+          <div class="fila-botones">
+            <button class="boton-principal" id="boton-dni">Registrar ingreso</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna derecha: resultado -->
+      <div>
+        <div class="verificacion espera" id="resultado">
+          <div class="foto" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="64" height="64"><circle cx="32" cy="23" r="12" fill="#b9c4c0"/><path d="M10 60c0-12 10-19 22-19s22 7 22 19z" fill="#b9c4c0"/></svg>
+          </div>
+          <div class="verificacion-datos">
+            <p class="nombre">Esperando lectura</p>
+            <p class="seccion">Acerque la credencial a la cámara</p>
+          </div>
+        </div>
+
+        <p class="aviso-cola" id="cola" hidden></p>
+
+        <div class="panel">
+          <div class="cabecera" style="margin-bottom:12px">
+            <h2 style="margin:0">Registrados hoy</h2>
+            <span class="canal" id="total-hoy"></span>
+          </div>
+          <div class="envoltura-tabla">
+            <table class="tabla compacta">
+              <thead><tr><th>Hora</th><th>Estudiante</th><th>Sección</th><th>Estado</th><th>Método</th></tr></thead>
+              <tbody id="filas-hoy"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="js/vendor/html5-qrcode.min.js"></script>
+<script src="js/comun.js"></script>
+<script src="js/registro.js"></script>
+</body>
+</html>

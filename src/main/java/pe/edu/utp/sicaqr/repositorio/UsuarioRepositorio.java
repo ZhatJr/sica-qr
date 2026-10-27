@@ -6,11 +6,12 @@ import pe.edu.utp.sicaqr.modelo.Usuario;
 
 import java.util.Optional;
 
-/** DAO · Acceso a la tabla usuario. */
+/**
+ * Repositorio de la entidad {@link Usuario}.
+ */
 @Repository
 public interface UsuarioRepositorio extends JpaRepository<Usuario, Long> {
 
-    // Spring genera la consulta a partir del nombre del metodo:
-    // SELECT * FROM usuario WHERE nombre_usuario = ?
+    /** Busca una cuenta por su nombre de usuario. */
     Optional<Usuario> findByNombreUsuario(String nombreUsuario);
 }

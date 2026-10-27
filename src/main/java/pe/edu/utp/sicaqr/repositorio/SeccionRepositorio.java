@@ -6,7 +6,9 @@ import pe.edu.utp.sicaqr.modelo.Seccion;
 
 import java.util.List;
 
-/** DAO · Acceso a la tabla seccion. */
+/**
+ * Repositorio de la entidad {@link Seccion}.
+ */
 @Repository
 public interface SeccionRepositorio extends JpaRepository<Seccion, Long> {
 

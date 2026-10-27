@@ -3,9 +3,8 @@ package pe.edu.utp.sicaqr.modelo;
 import jakarta.persistence.*;
 
 /**
- * MODELO (MVC) · Tabla seccion
- *
- * Aulas de cada grado (A, B...).
+ * Entidad de la tabla {@code seccion}.
+ * Sección de un grado.
  */
 @Entity
 @Table(name = "seccion")
@@ -25,8 +24,6 @@ public class Seccion {
 
     @Column(name = "activo")
     private Boolean activo = true;
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdSeccion() { return idSeccion; }
     public void setIdSeccion(Long idSeccion) { this.idSeccion = idSeccion; }

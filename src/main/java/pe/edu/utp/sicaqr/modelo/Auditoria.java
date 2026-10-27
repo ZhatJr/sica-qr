@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- * MODELO (MVC) · Tabla auditoria
- *
- * Bitacora de auditoria: quien hizo que operacion, en que tabla y cuando (RF-12, RNF-04).
+ * Entidad de la tabla {@code auditoria}.
+ * Entrada de la bitácora de auditoría: usuario, operación, tabla afectada y detalle (RF-12).
  */
 @Entity
 @Table(name = "auditoria")
@@ -38,8 +37,6 @@ public class Auditoria {
 
     @Column(name = "realizado_en")
     private LocalDateTime realizadoEn = LocalDateTime.now();
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdAuditoria() { return idAuditoria; }
     public void setIdAuditoria(Long idAuditoria) { this.idAuditoria = idAuditoria; }

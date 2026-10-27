@@ -37,15 +37,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Registro y consulta de asistencia.
- *
- * SOLID · Responsabilidad unica (SRP): esta clase solo maneja asistencia.
- *   - La regla puntual/tardanza esta en ClasificadorAsistencia.
- *   - El cifrado de claves esta en UtilClave.
- *   - La bitacora esta en ServicioAuditoria.
- *
- * SOLID · Inversion de dependencias (DIP): recibe los DAO por el constructor;
- *   no crea sus dependencias con "new".
+ * Implementación del registro y la consulta de asistencia.
+ * La clasificación se delega a {@link ClasificadorAsistencia} y la bitácora
+ * a {@link ServicioAuditoria}.
  */
 @Service
 public class ServicioAsistenciaImpl implements ServicioAsistencia {
@@ -91,7 +85,6 @@ public class ServicioAsistenciaImpl implements ServicioAsistencia {
     @Transactional
     public ResultadoRegistro registrarPorQr(RegistroQrPeticion peticion, UsuarioSesion usuario, String ip) {
 
-        // Apache Commons: valida que se haya leido algo
         if (peticion == null || StringUtils.isBlank(peticion.token())) {
             throw new ReglaNegocioException("No se leyó ningún código");
         }
@@ -99,8 +92,7 @@ public class ServicioAsistenciaImpl implements ServicioAsistencia {
         UUID token = convertirUuid(peticion.token().trim(),
                 "El código leído no es una credencial de SICA-QR");
 
-        // Idempotencia (RNF-05): si este mismo envio ya llego antes, se devuelve
-        // el registro existente en vez de crear otro
+        // Idempotencia (RNF-05): un envío repetido devuelve el registro existente
         UUID uuidSincronizacion = StringUtils.isBlank(peticion.uuidSincronizacion())
                 ? UUID.randomUUID()
                 : convertirUuid(peticion.uuidSincronizacion().trim(), "Identificador de envío no válido");
@@ -110,7 +102,6 @@ public class ServicioAsistenciaImpl implements ServicioAsistencia {
             return aResultado(yaRecibido.get(), "Este registro ya había sido recibido");
         }
 
-        // DAO: busca la credencial activa con ese token
         Credencial credencial = credencialRepositorio.findByTokenUuidAndEstado(token, "ACTIVA")
                 .orElseThrow(() -> new ReglaNegocioException(
                         "Credencial no válida o revocada. Use el registro por DNI."));
@@ -125,7 +116,6 @@ public class ServicioAsistenciaImpl implements ServicioAsistencia {
 
         String dni = peticion == null ? "" : StringUtils.trimToEmpty(peticion.dni());
 
-        // Apache Commons: el DNI debe tener 8 digitos numericos
         if (dni.length() != 8 || !StringUtils.isNumeric(dni)) {
             throw new ReglaNegocioException("El DNI debe tener 8 dígitos");
         }
@@ -146,8 +136,7 @@ public class ServicioAsistenciaImpl implements ServicioAsistencia {
 
         LocalDateTime ahora = LocalDateTime.now();
 
-        // La hora de captura la envia el dispositivo. Si no llega, o llega con
-        // una hora futura (reloj mal configurado), se usa la hora del servidor.
+        // Sin hora de captura, o con hora futura, se usa la hora del servidor
         if (capturadoEn == null || capturadoEn.isAfter(ahora)) {
             capturadoEn = ahora;
         }
@@ -156,7 +145,6 @@ public class ServicioAsistenciaImpl implements ServicioAsistencia {
         PeriodoAcademico periodo = periodoRepositorio.findByEstado("ACTIVO")
                 .orElseThrow(() -> new ReglaNegocioException("No hay un año escolar activo"));
 
-        // Un feriado o fin de semana no es dia de clases
         Optional<CalendarioEscolar> dia = calendarioRepositorio.findByPeriodoAndFecha(periodo, fecha);
         if (dia.isPresent() && !dia.get().getEsLaborable()) {
             throw new ReglaNegocioException("El " + Formato.fecha(fecha) + " no es día de clases ("
@@ -167,7 +155,7 @@ public class ServicioAsistenciaImpl implements ServicioAsistencia {
                 .orElseThrow(() -> new ReglaNegocioException(
                         Formato.nombre(estudiante) + " no tiene matrícula activa en el año escolar"));
 
-        // Control de duplicados: un registro por estudiante por dia
+        // Un registro por estudiante por día
         Optional<RegistroAsistencia> duplicado = registroRepositorio.findByMatriculaAndFechaAsistencia(matricula, fecha);
         if (duplicado.isPresent()) {
             throw new ReglaNegocioException(Formato.nombre(estudiante) + " ya registró su ingreso hoy a las "
@@ -177,14 +165,14 @@ public class ServicioAsistenciaImpl implements ServicioAsistencia {
         Configuracion configuracion = configuracionRepositorio.findByPeriodoAndActivoTrue(periodo)
                 .orElseThrow(() -> new ReglaNegocioException("No hay una configuración de horario activa"));
 
-        // RF-02: se clasifica con la HORA DE CAPTURA, no con la hora actual del servidor
+        // RF-02: se clasifica con la hora de captura, no con la hora de llegada al servidor
         String estado = ClasificadorAsistencia.clasificar(
                 capturadoEn.toLocalTime(),
                 configuracion.getHoraEntrada(),
                 configuracion.getToleranciaMinutos(),
                 configuracion.getHoraCorte());
 
-        // Si se leyo hace mas de 2 minutos, el registro llego tarde por falta de conexion
+        // Lectura con más de 2 minutos de antigüedad: llegó desde la cola sin conexión
         boolean sinConexion = Duration.between(capturadoEn, ahora).toMinutes() >= 2;
 
         RegistroAsistencia registro = new RegistroAsistencia();

@@ -5,8 +5,7 @@ import org.springframework.stereotype.Repository;
 import pe.edu.utp.sicaqr.modelo.Apoderado;
 
 /**
- * DAO · Acceso a la tabla de Apoderado.
- * JpaRepository ya trae save, findById, findAll y count.
+ * Repositorio de la entidad {@link Apoderado}.
  */
 @Repository
 public interface ApoderadoRepositorio extends JpaRepository<Apoderado, Long> {

@@ -2,7 +2,7 @@ package pe.edu.utp.sicaqr.dto;
 
 import java.time.LocalDate;
 
-/** Indicadores del panel principal (V02). */
+/** Indicadores de asistencia de un día (V02). */
 public record ResumenDia(
         LocalDate fecha,
         long matriculados,

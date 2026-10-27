@@ -5,8 +5,7 @@ import org.springframework.stereotype.Repository;
 import pe.edu.utp.sicaqr.modelo.Grado;
 
 /**
- * DAO · Acceso a la tabla de Grado.
- * JpaRepository ya trae save, findById, findAll y count.
+ * Repositorio de la entidad {@link Grado}.
  */
 @Repository
 public interface GradoRepositorio extends JpaRepository<Grado, Long> {

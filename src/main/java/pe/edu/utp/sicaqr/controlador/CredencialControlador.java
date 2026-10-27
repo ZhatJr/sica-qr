@@ -16,10 +16,7 @@ import pe.edu.utp.sicaqr.servicio.ServicioCredencial;
 
 import java.util.List;
 
-/**
- * CONTROLADOR (MVC) · Estudiantes y credenciales QR. Pantalla V03 (RF-11).
- * Solo el ADMINISTRADOR puede usar estas rutas.
- */
+/** API de estudiantes y credenciales QR (V03, RF-11). Acceso: ADMINISTRADOR. */
 @RestController
 @RequestMapping("/api")
 public class CredencialControlador {
@@ -48,9 +45,8 @@ public class CredencialControlador {
     }
 
     /**
-     * PUT /api/credenciales/{id}/revocar  { "motivo": "Perdida" }
-     *
-     * Es PUT y no DELETE: la credencial no se borra, cambia su estado a REVOCADA.
+     * PUT /api/credenciales/{id}/revocar  { "motivo": "..." }
+     * Cambia el estado de la credencial a REVOCADA; no la elimina.
      */
     @PutMapping("/credenciales/{id}/revocar")
     public ResponseEntity<Void> revocar(@PathVariable Long id, @RequestBody RevocarCredencialPeticion peticion,
@@ -60,7 +56,7 @@ public class CredencialControlador {
         return ResponseEntity.noContent().build();
     }
 
-    /** GET /api/credenciales/{token}/qr  -> imagen PNG para imprimir */
+    /** GET /api/credenciales/{token}/qr: imagen PNG del código QR. */
     @GetMapping("/credenciales/{token}/qr")
     public ResponseEntity<byte[]> imagenQr(@PathVariable String token, HttpSession sesion) {
         ControlAcceso.exigirRol(sesion, Roles.ADMINISTRADOR);

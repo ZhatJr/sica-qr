@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SICA-QR · Panel principal</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<div class="app">
+  <aside class="menu" id="menu"></aside>
+
+  <!-- V02 · Panel principal (RF-04, RF-07, RF-08) -->
+  <main class="contenido">
+    <header class="cabecera">
+      <div>
+        <h1>Panel principal</h1>
+        <p id="subtitulo">Cargando...</p>
+      </div>
+      <span class="pastilla-conexion" id="conexion">Conectado</span>
+    </header>
+
+    <div class="filtros">
+      <label>Día
+        <input type="date" id="fecha">
+      </label>
+      <button class="boton-secundario" id="boton-hoy">Hoy</button>
+    </div>
+
+    <div class="resumen">
+      <div class="dato"><strong class="c-puntual" id="puntuales">–</strong><span>Puntuales</span></div>
+      <div class="dato"><strong class="c-tardanza" id="tardanzas">–</strong><span>Tardanzas</span></div>
+      <div class="dato"><strong class="c-falta" id="faltas">–</strong><span>Inasistencias</span></div>
+      <div class="dato"><strong id="sin-registro">–</strong><span>Aún sin registrar</span></div>
+    </div>
+
+    <h4 class="subtitulo">ACCESOS DIRECTOS SEGÚN EL ROL</h4>
+    <div class="atajos" id="atajos"></div>
+
+    <div class="panel" id="panel-secciones" hidden>
+      <h2>Asistencia por sección</h2>
+      <ul class="barras" id="barras"></ul>
+      <p class="pie-panel">
+        Porcentaje de estudiantes que ingresaron (puntuales y tardanzas) sobre los registros
+        del día en cada sección. El panel muestra solo los módulos autorizados para el rol de la sesión.
+      </p>
+    </div>
+  </main>
+</div>
+
+<script src="js/comun.js"></script>
+<script src="js/panel.js"></script>
+</body>
+</html>

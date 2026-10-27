@@ -4,9 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- * MODELO (MVC) · Tabla notificacion
- *
- * Mensaje enviado al apoderado por una tardanza o falta (RF-09).
+ * Entidad de la tabla {@code notificacion}.
+ * Notificación enviada al apoderado por una tardanza o inasistencia (RF-09).
  */
 @Entity
 @Table(name = "notificacion")
@@ -48,8 +47,6 @@ public class Notificacion {
 
     @Column(name = "detalle_error")
     private String detalleError;
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdNotificacion() { return idNotificacion; }
     public void setIdNotificacion(Long idNotificacion) { this.idNotificacion = idNotificacion; }

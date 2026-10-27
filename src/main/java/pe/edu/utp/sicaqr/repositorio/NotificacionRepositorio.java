@@ -6,7 +6,9 @@ import pe.edu.utp.sicaqr.modelo.Notificacion;
 
 import java.util.List;
 
-/** DAO · Acceso a la tabla notificacion. */
+/**
+ * Repositorio de la entidad {@link Notificacion}.
+ */
 @Repository
 public interface NotificacionRepositorio extends JpaRepository<Notificacion, Long> {
 

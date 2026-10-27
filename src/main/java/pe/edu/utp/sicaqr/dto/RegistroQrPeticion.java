@@ -3,11 +3,11 @@ package pe.edu.utp.sicaqr.dto;
 import java.time.LocalDateTime;
 
 /**
- * Lo que envia la pantalla de registro (V04) al escanear un QR.
+ * Lectura de un código QR enviada desde el registro de ingreso (V04).
  *
- * token              -> texto leido del codigo QR
- * capturadoEn        -> hora en que el dispositivo leyo el QR
- * uuidSincronizacion -> identificador unico del envio; si se reenvia, no se duplica
+ * @param token              texto leído del código QR
+ * @param capturadoEn        fecha y hora de la lectura en el dispositivo
+ * @param uuidSincronizacion identificador único del envío, evita duplicados al reenviar
  */
 public record RegistroQrPeticion(String token, LocalDateTime capturadoEn, String uuidSincronizacion) {
 }

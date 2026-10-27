@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    SICA-QR | LIBRERIA LOGBACK
-
-    Dos salidas:
-      CONSOLA           -> mensajes tecnicos mientras corre la aplicacion
-      AUDITORIA_ARCHIVO -> bitacora de auditoria en logs/auditoria.log
-                           (un archivo por dia, se guardan 90 dias)
+    SICA-QR | Configuracion de Logback
+      CONSOLA           : log tecnico de la aplicacion
+      AUDITORIA_ARCHIVO : bitacora de auditoria (logs/auditoria.log),
+                          rotacion diaria y conservacion de 90 dias
 -->
 <configuration>
 
@@ -30,7 +28,7 @@
         </encoder>
     </appender>
 
-    <!-- Logger que usa ServicioAuditoria: LoggerFactory.getLogger("AUDITORIA") -->
+    <!-- Logger de ServicioAuditoria -->
     <logger name="AUDITORIA" level="INFO" additivity="false">
         <appender-ref ref="AUDITORIA_ARCHIVO"/>
         <appender-ref ref="CONSOLA"/>

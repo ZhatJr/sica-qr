@@ -20,7 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-/** CONTROLADOR (MVC) · Descarga del reporte de asistencia (RF-07, reporte R01/R02). */
+/** API de descarga del reporte de asistencia (RF-07). Acceso: DOCENTE y DIRECCION. */
 @RestController
 @RequestMapping("/api/reportes")
 public class ReporteControlador {
@@ -29,7 +29,6 @@ public class ReporteControlador {
     private final ServicioReporte servicioReporte;
     private final ServicioAuditoria auditoria;
 
-    // OCP + DIP: depende de ServicioReporte (interfaz). Hoy la implementa Excel.
     public ReporteControlador(ServicioAsistencia servicioAsistencia,
                               ServicioReporte servicioReporte,
                               ServicioAuditoria auditoria) {

@@ -8,7 +8,7 @@ import pe.edu.utp.sicaqr.modelo.Usuario;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/** Textos que se muestran en pantalla y en los reportes. */
+/** Formato de nombres, secciones, fechas y horas para pantallas y reportes. */
 public final class Formato {
 
     private static final DateTimeFormatter HORA = DateTimeFormatter.ofPattern("HH:mm");
@@ -17,7 +17,7 @@ public final class Formato {
     private Formato() {
     }
 
-    /** "Alvarado Sosa, Luciana Valeria" */
+    /** Nombre en formato "Apellidos, Nombres". */
     public static String nombre(Estudiante e) {
         return e.getApellidos() + ", " + e.getNombres();
     }
@@ -26,12 +26,11 @@ public final class Formato {
         return u == null ? null : u.getNombres() + " " + u.getApellidos();
     }
 
-    /** "Primaria 5.° A" */
+    /** Etiqueta de la sección, por ejemplo "Primaria 5.° A". */
     public static String seccion(Seccion s) {
         if (s == null) {
             return "Sin matrícula";
         }
-        // Apache Commons: "PRIMARIA" -> "Primaria"
         String nivel = StringUtils.capitalize(StringUtils.lowerCase(s.getGrado().getNivelEducativo()));
         return nivel + " " + s.getGrado().getNombre() + " " + s.getNombre();
     }

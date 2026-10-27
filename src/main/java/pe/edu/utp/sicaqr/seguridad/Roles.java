@@ -1,6 +1,6 @@
 package pe.edu.utp.sicaqr.seguridad;
 
-/** Nombres de los roles, tal como estan en la tabla rol (TABLA 24 del informe). */
+/** Nombres de los roles registrados en la tabla {@code rol}. */
 public final class Roles {
 
     public static final String ADMINISTRADOR = "ADMINISTRADOR";

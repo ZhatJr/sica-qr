@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SICA-QR · Justificaciones</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<div class="app">
+  <aside class="menu" id="menu"></aside>
+
+  <!-- V07 · Gestión de justificaciones (RF-05, RF-06) -->
+  <main class="contenido">
+    <header class="cabecera">
+      <div>
+        <h1>Justificaciones</h1>
+        <p id="subtitulo">Cargando...</p>
+      </div>
+      <span class="pastilla-conexion" id="conexion">Conectado</span>
+    </header>
+
+    <p class="nota-avance">
+      Módulo en modo consulta. El registro, la aprobación y el rechazo de justificaciones
+      se habilitarán en la siguiente versión.
+    </p>
+
+    <div class="filtros">
+      <label>Estado
+        <select id="estado">
+          <option value="">Todas</option>
+          <option value="PENDIENTE">Pendiente</option>
+          <option value="APROBADA">Aprobada</option>
+          <option value="RECHAZADA">Rechazada</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="dos-columnas">
+      <div class="lista" id="lista"></div>
+      <div class="detalle" id="detalle">
+        <p class="canal">Seleccione una solicitud de la lista.</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="js/comun.js"></script>
+<script src="js/justificaciones.js"></script>
+</body>
+</html>

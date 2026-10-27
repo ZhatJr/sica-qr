@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SICA-QR · Alertas</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<div class="app">
+  <aside class="menu" id="menu"></aside>
+
+  <!-- V08 · Alertas de acumulación (RF-08, RF-04) -->
+  <main class="contenido">
+    <header class="cabecera">
+      <div>
+        <h1>Alertas de acumulación</h1>
+        <p>Estudiantes que superaron el umbral de tardanzas o inasistencias</p>
+      </div>
+      <span class="pastilla-conexion" id="conexion">Conectado</span>
+    </header>
+
+    <p class="nota-avance">
+      Módulo en modo consulta. La generación automática y la atención de alertas
+      se habilitarán en la siguiente versión.
+    </p>
+
+    <div class="resumen">
+      <div class="dato"><strong id="total">–</strong><span>Alertas</span></div>
+      <div class="dato"><strong class="c-falta" id="criticas">–</strong><span>Críticas</span></div>
+      <div class="dato"><strong class="c-tardanza" id="preventivas">–</strong><span>Preventivas</span></div>
+      <div class="dato"><strong id="pendientes">–</strong><span>Sin atender</span></div>
+    </div>
+
+    <div class="filtros">
+      <label>Nivel
+        <select id="nivel">
+          <option value="">Todos</option>
+          <option value="CRITICA">Crítica</option>
+          <option value="PREVENTIVA">Preventiva</option>
+          <option value="INFORMATIVA">Informativa</option>
+        </select>
+      </label>
+      <label>Estado
+        <select id="estado">
+          <option value="">Todos</option>
+          <option value="PENDIENTE">Pendiente</option>
+          <option value="EN_ATENCION">En atención</option>
+          <option value="ATENDIDA">Atendida</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="envoltura-tabla">
+      <table class="tabla">
+        <thead>
+          <tr><th>Estudiante</th><th>Sección</th><th>Motivo</th><th>Nivel</th><th>Estado</th><th>Generada</th></tr>
+        </thead>
+        <tbody id="filas"></tbody>
+      </table>
+    </div>
+    <p class="pie-panel">
+      El sistema solo detecta la condición y avisa al tutor. La medida a aplicar la decide la institución.
+    </p>
+  </main>
+</div>
+
+<script src="js/comun.js"></script>
+<script src="js/alertas.js"></script>
+</body>
+</html>

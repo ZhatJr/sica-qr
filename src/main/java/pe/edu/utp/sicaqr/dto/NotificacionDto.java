@@ -2,7 +2,7 @@ package pe.edu.utp.sicaqr.dto;
 
 import java.time.LocalDateTime;
 
-/** Fila del seguimiento de notificaciones (V06). */
+/** Notificación para el seguimiento de envíos (V06). */
 public record NotificacionDto(
         Long idNotificacion,
         String apoderado,

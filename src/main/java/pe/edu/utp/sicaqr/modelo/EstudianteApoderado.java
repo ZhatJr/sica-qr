@@ -3,9 +3,8 @@ package pe.edu.utp.sicaqr.modelo;
 import jakarta.persistence.*;
 
 /**
- * MODELO (MVC) · Tabla estudiante_apoderado
- *
- * Tabla intermedia: un estudiante puede tener varios apoderados y un apoderado varios hijos.
+ * Entidad de la tabla {@code estudiante_apoderado}.
+ * Relación entre estudiante y apoderado, con parentesco y apoderado principal.
  */
 @Entity
 @Table(name = "estudiante_apoderado")
@@ -35,8 +34,6 @@ public class EstudianteApoderado {
 
     @Column(name = "activo")
     private Boolean activo = true;
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdEstudianteApoderado() { return idEstudianteApoderado; }
     public void setIdEstudianteApoderado(Long idEstudianteApoderado) { this.idEstudianteApoderado = idEstudianteApoderado; }

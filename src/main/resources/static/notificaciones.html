@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SICA-QR · Notificaciones</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<div class="app">
+  <aside class="menu" id="menu"></aside>
+
+  <!-- V06 · Seguimiento de notificaciones (RF-09, RF-12) -->
+  <main class="contenido">
+    <header class="cabecera">
+      <div>
+        <h1>Seguimiento de notificaciones</h1>
+        <p>Avisos enviados a los apoderados por tardanzas e inasistencias</p>
+      </div>
+      <span class="pastilla-conexion" id="conexion">Conectado</span>
+    </header>
+
+    <p class="nota-avance">
+      Módulo en modo consulta. El envío por WhatsApp, correo o SMS y el reintento
+      se habilitarán en la siguiente versión.
+    </p>
+
+    <div class="resumen">
+      <div class="dato"><strong class="c-puntual" id="enviadas">–</strong><span>Enviadas</span></div>
+      <div class="dato"><strong class="c-tardanza" id="pendientes">–</strong><span>Pendientes</span></div>
+      <div class="dato"><strong class="c-falta" id="fallidas">–</strong><span>Fallidas</span></div>
+      <div class="dato"><strong id="total">–</strong><span>Total de avisos</span></div>
+    </div>
+
+    <div class="filtros">
+      <label>Estado
+        <select id="estado">
+          <option value="">Todos</option>
+          <option value="ENVIADA">Enviada</option>
+          <option value="PENDIENTE">Pendiente</option>
+          <option value="FALLIDA">Fallida</option>
+        </select>
+      </label>
+      <label>Canal
+        <select id="canal">
+          <option value="">Todos</option>
+          <option value="WHATSAPP">WhatsApp</option>
+          <option value="CORREO">Correo</option>
+          <option value="SMS">SMS</option>
+        </select>
+      </label>
+      <label>Buscar
+        <input type="text" id="buscar" placeholder="Estudiante o apoderado">
+      </label>
+    </div>
+
+    <div class="envoltura-tabla">
+      <table class="tabla">
+        <thead>
+          <tr><th>Fecha</th><th>Estudiante</th><th>Apoderado</th><th>Canal</th><th>Destino</th><th>Intentos</th><th>Estado</th></tr>
+        </thead>
+        <tbody id="filas"></tbody>
+      </table>
+    </div>
+    <p class="pie-panel">
+      El estado "Enviada" acredita la entrega al proveedor del canal, no la lectura por parte del apoderado.
+    </p>
+  </main>
+</div>
+
+<script src="js/comun.js"></script>
+<script src="js/notificaciones.js"></script>
+</body>
+</html>

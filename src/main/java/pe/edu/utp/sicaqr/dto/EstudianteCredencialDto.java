@@ -2,7 +2,7 @@ package pe.edu.utp.sicaqr.dto;
 
 import java.time.LocalDateTime;
 
-/** Fila de la pantalla V03: estudiante con su credencial activa (si tiene). */
+/** Estudiante con su sección y su credencial activa, si la tiene (V03). */
 public record EstudianteCredencialDto(
         Long idEstudiante,
         String codigo,

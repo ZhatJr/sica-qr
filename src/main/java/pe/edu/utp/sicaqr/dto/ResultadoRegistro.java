@@ -1,6 +1,6 @@
 package pe.edu.utp.sicaqr.dto;
 
-/** Lo que la pantalla V04 muestra despues de registrar un ingreso. */
+/** Resultado de un registro de ingreso (V04). */
 public record ResultadoRegistro(
         Long idRegistro,
         String codigo,

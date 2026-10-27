@@ -5,9 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * MODELO (MVC) · Tabla estudiante
- *
- * Datos del estudiante. No es usuario del sistema: solo presenta su credencial QR.
+ * Entidad de la tabla {@code estudiante}.
+ * Datos personales del estudiante.
  */
 @Entity
 @Table(name = "estudiante")
@@ -41,8 +40,6 @@ public class Estudiante {
 
     @Column(name = "creado_en")
     private LocalDateTime creadoEn = LocalDateTime.now();
-
-    // ---------------- Getters y setters ----------------
 
     public Long getIdEstudiante() { return idEstudiante; }
     public void setIdEstudiante(Long idEstudiante) { this.idEstudiante = idEstudiante; }

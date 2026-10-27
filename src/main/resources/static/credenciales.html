@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SICA-QR · Credenciales QR</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<div class="app">
+  <aside class="menu" id="menu"></aside>
+
+  <!-- V03 · Estudiantes y credenciales (RF-11) -->
+  <main class="contenido">
+    <header class="cabecera">
+      <div>
+        <h1>Estudiantes y credenciales</h1>
+        <p id="subtitulo">Cargando...</p>
+      </div>
+      <div class="exportar">
+        <button class="boton-principal" id="boton-imprimir">Imprimir credenciales</button>
+      </div>
+    </header>
+
+    <div class="filtros">
+      <label>Sección
+        <select id="seccion"></select>
+      </label>
+      <label>Credencial
+        <select id="estado">
+          <option value="">Todas</option>
+          <option value="activa">Activa</option>
+          <option value="sin">Sin credencial activa</option>
+        </select>
+      </label>
+      <label>Buscar
+        <input type="text" id="buscar" placeholder="Nombre, código o DNI">
+      </label>
+    </div>
+
+    <div class="dos-tercios">
+      <div class="envoltura-tabla">
+        <table class="tabla">
+          <thead>
+            <tr><th>Estudiante</th><th>DNI</th><th>Sección</th><th>Emitida</th><th>Estado</th></tr>
+          </thead>
+          <tbody id="filas"></tbody>
+        </table>
+      </div>
+
+      <div class="credencial-vista" id="vista">
+        <strong style="font-size:14px">Vista previa</strong>
+        <p class="leyenda">Seleccione un estudiante de la tabla.</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Solo se ve al imprimir -->
+<div class="zona-impresion" id="zona-impresion"></div>
+
+<script src="js/comun.js"></script>
+<script src="js/credenciales.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SICA-QR · Inicio de sesión</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<!-- V01 · Inicio de sesión (RF-12, RNF-04) -->
+<div class="acceso">
+  <div class="acceso-marca">
+    <div class="logo-qr" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <h1>SICA-QR</h1>
+    <p>Control de asistencia escolar</p>
+  </div>
+
+  <form class="acceso-form" id="formulario" novalidate>
+    <div class="mensaje-error" id="error" hidden></div>
+
+    <label for="usuario">Usuario</label>
+    <input id="usuario" type="text" autocomplete="username" required autofocus>
+
+    <label for="clave">Contraseña</label>
+    <input id="clave" type="password" autocomplete="current-password" required>
+
+    <button class="boton-principal" type="submit" id="boton-entrar">Entrar</button>
+    <p class="acceso-nota">¿Olvidó su contraseña? Solicítela al administrador del sistema.</p>
+  </form>
+
+  <p class="acceso-pie">
+    I.E. N.° 14762 Luciano Castillo Colonna<br>
+    La Huaca · Paita · Piura
+  </p>
+</div>
+
+<script src="js/comun.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html>

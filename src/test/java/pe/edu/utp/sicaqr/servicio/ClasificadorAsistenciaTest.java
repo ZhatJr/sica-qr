@@ -8,10 +8,8 @@ import java.time.LocalTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * TDD · Pruebas de la regla de clasificacion (RF-02).
- *
- * Se usan los parametros del informe (criterio de verificacion del RF-02):
- * entrada 07:30, tolerancia 10 minutos, corte 09:00.
+ * Pruebas unitarias de {@link ClasificadorAsistencia} (RF-02).
+ * Parámetros del criterio de verificación: entrada 07:30, tolerancia 10 minutos, corte 09:00.
  */
 class ClasificadorAsistenciaTest {
 
@@ -70,8 +68,7 @@ class ClasificadorAsistenciaTest {
     @Test
     @DisplayName("Sin conexion: leido 07:20 y sincronizado 09:30 queda PUNTUAL")
     void laHoraDeSincronizacionNoAfecta() {
-        // El servicio clasifica con capturadoEn (07:20), no con la hora en que
-        // el registro llego al servidor (09:30). Por eso el resultado es PUNTUAL.
+        // Se clasifica con la hora de captura (07:20), no con la de llegada al servidor (09:30)
         LocalTime capturadoEn = LocalTime.of(7, 20);
         LocalTime registradoEn = LocalTime.of(9, 30);
 
@@ -79,6 +76,6 @@ class ClasificadorAsistenciaTest {
                 ClasificadorAsistencia.clasificar(capturadoEn, ENTRADA, TOLERANCIA, CORTE));
         assertEquals("INASISTENCIA",
                 ClasificadorAsistencia.clasificar(registradoEn, ENTRADA, TOLERANCIA, CORTE),
-                "Si se usara la hora de llegada al servidor, el estudiante quedaria como falta");
+                "Con la hora de llegada al servidor el ingreso quedaría como inasistencia");
     }
 }
