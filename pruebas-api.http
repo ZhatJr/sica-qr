@@ -1,0 +1,174 @@
+###############################################################################
+#  SICA-QR · Pruebas de la API
+#
+#  Como usarlo:
+#   1. Instala en VS Code la extension "REST Client" (de Huachao Mao).
+#   2. Ejecuta el proyecto (SicaQrApplication).
+#   3. Haz clic en "Send Request" encima de cada peticion, EN ORDEN.
+#
+#  La sesion se guarda sola entre peticiones (cookie). Al iniciar sesion
+#  con otro usuario, la sesion anterior se reemplaza.
+###############################################################################
+
+@api = http://localhost:8080/api
+
+
+###############################################################################
+#  1. ADMINISTRADOR · Credenciales QR (RF-11)
+###############################################################################
+
+### 1.1 Iniciar sesion como administrador
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{ "usuario": "admin", "clave": "admin123" }
+
+### 1.2 Quien esta conectado
+GET {{api}}/auth/sesion
+
+### 1.3 Listar estudiantes con su credencial
+# @name estudiantes
+GET {{api}}/estudiantes
+
+### 1.4 Ver el QR del primer estudiante (abre la imagen PNG)
+GET {{api}}/credenciales/{{estudiantes.response.body.$[0].token}}/qr
+
+### 1.5 Revocar la credencial del ultimo estudiante (es PUT, no DELETE)
+PUT {{api}}/credenciales/{{estudiantes.response.body.$[19].idCredencial}}/revocar
+Content-Type: application/json
+
+{ "motivo": "Pérdida reportada por el apoderado" }
+
+### 1.6 Emitir una credencial nueva para ese mismo estudiante
+POST {{api}}/credenciales
+Content-Type: application/json
+
+{ "idEstudiante": {{estudiantes.response.body.$[19].idEstudiante}} }
+
+### 1.7 ERROR esperado: emitir otra cuando ya tiene una activa -> 400
+POST {{api}}/credenciales
+Content-Type: application/json
+
+{ "idEstudiante": {{estudiantes.response.body.$[19].idEstudiante}} }
+
+
+###############################################################################
+#  2. AUXILIAR · Registro de ingreso (RF-01, RF-02, RF-10)
+###############################################################################
+
+### 2.1 Iniciar sesion como auxiliar
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{ "usuario": "auxiliar", "clave": "auxiliar123" }
+
+### 2.2 ERROR esperado: el auxiliar no puede ver credenciales -> 403
+GET {{api}}/estudiantes
+
+### 2.3 Registrar ingreso por QR leido HOY a las 07:35 -> PUNTUAL
+# Como se envia una hora de captura anterior a la actual, el sistema lo
+# marca como SIN_CONEXION, pero lo clasifica con las 07:35: queda PUNTUAL.
+POST {{api}}/asistencias/qr
+Content-Type: application/json
+
+{
+  "token": "{{estudiantes.response.body.$[0].token}}",
+  "capturadoEn": "{{$localDatetime 'YYYY-MM-DD'}}T07:35:00"
+}
+
+### 2.4 Registrar ingreso por QR leido HOY a las 07:52 -> TARDANZA
+POST {{api}}/asistencias/qr
+Content-Type: application/json
+
+{
+  "token": "{{estudiantes.response.body.$[1].token}}",
+  "capturadoEn": "{{$localDatetime 'YYYY-MM-DD'}}T07:52:00"
+}
+
+### 2.5 ERROR esperado: escanear de nuevo al mismo estudiante -> 400 (duplicado)
+POST {{api}}/asistencias/qr
+Content-Type: application/json
+
+{
+  "token": "{{estudiantes.response.body.$[0].token}}",
+  "capturadoEn": "{{$localDatetime 'YYYY-MM-DD'}}T07:36:00"
+}
+
+### 2.6 ERROR esperado: un QR que no es de SICA-QR -> 400
+POST {{api}}/asistencias/qr
+Content-Type: application/json
+
+{ "token": "https://www.google.com" }
+
+### 2.7 Contingencia: el estudiante olvido su credencial, se registra por DNI (RF-10)
+# Se usa la hora actual del servidor
+POST {{api}}/asistencias/dni
+Content-Type: application/json
+
+{ "dni": "{{estudiantes.response.body.$[2].dni}}" }
+
+### 2.8 ERROR esperado: DNI con letras -> 400
+POST {{api}}/asistencias/dni
+Content-Type: application/json
+
+{ "dni": "8123ABCD" }
+
+
+###############################################################################
+#  3. DOCENTE · Consulta y reporte (RF-04, RF-07)
+###############################################################################
+
+### 3.1 Iniciar sesion como docente
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{ "usuario": "docente", "clave": "docente123" }
+
+### 3.2 Indicadores de hoy (panel principal)
+GET {{api}}/panel/resumen
+
+### 3.3 Secciones para los filtros
+GET {{api}}/secciones
+
+### 3.4 Asistencia de hoy, todas las secciones
+GET {{api}}/asistencias
+
+### 3.5 Asistencia de Primaria 5.° A en lo que va de octubre
+GET {{api}}/asistencias?idSeccion=11&desde=2026-10-01&hasta=2026-10-31
+
+### 3.6 ERROR esperado: fecha inicial mayor que la final -> 400
+GET {{api}}/asistencias?desde=2026-10-31&hasta=2026-10-01
+
+### 3.7 Descargar el reporte en Excel (Apache POI)
+# En la respuesta, clic derecho -> "Save Response Body" para guardar el .xlsx
+GET {{api}}/reportes/asistencia?desde=2026-10-01&hasta=2026-10-31
+
+### 3.8 Justificaciones (solo lectura en este avance)
+GET {{api}}/justificaciones
+
+### 3.9 Alertas de acumulacion (solo lectura en este avance)
+GET {{api}}/alertas
+
+### 3.10 Cerrar sesion
+POST {{api}}/auth/logout
+
+### 3.11 ERROR esperado: sin sesion -> 401
+GET {{api}}/panel/resumen
+
+
+###############################################################################
+#  4. SEGURIDAD · Inicio de sesion
+###############################################################################
+
+### 4.1 ERROR esperado: contrasena incorrecta -> mensaje generico
+# Al quinto intento fallido la cuenta queda bloqueada.
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{ "usuario": "direccion", "clave": "equivocada" }
+
+### 4.2 ERROR esperado: usuario inexistente -> el MISMO mensaje generico
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{ "usuario": "noexiste", "clave": "loquesea" }
