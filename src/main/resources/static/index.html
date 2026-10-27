@@ -1,27 +1,43 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SICA-QR</title>
-    <style>
-        body { font-family: "Segoe UI", system-ui, sans-serif; background: #f4f6f9; color: #1e2a38;
-               display: flex; min-height: 100vh; align-items: center; justify-content: center; margin: 0; padding: 16px; }
-        .caja { background: #fff; border: 1px solid #d7dee6; border-radius: 10px; padding: 32px; max-width: 480px; }
-        h1 { margin: 0 0 4px; color: #123a5e; }
-        p { color: #5b6878; line-height: 1.5; }
-        .ok { display: inline-block; background: #dff3e8; color: #15603e; padding: 4px 12px;
-              border-radius: 12px; font-weight: 600; font-size: 14px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SICA-QR · Inicio de sesión</title>
+  <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-<div class="caja">
+
+<!-- V01 · Inicio de sesión (RF-12, RNF-04) -->
+<div class="acceso">
+  <div class="acceso-marca">
+    <div class="logo-qr" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </div>
     <h1>SICA-QR</h1>
-    <p>I.E. N.° 14762 "Luciano Castillo Colonna"</p>
-    <span class="ok">Servidor funcionando</span>
-    <p>El backend y la API REST están activos. Las pantallas del sistema
-       se agregan en la rama <strong>frontend</strong>.</p>
-    <p>Para probar la API, abre <code>pruebas-api.http</code> en VS Code.</p>
+    <p>Control de asistencia escolar</p>
+  </div>
+
+  <form class="acceso-form" id="formulario" novalidate>
+    <div class="mensaje-error" id="error" hidden></div>
+
+    <label for="usuario">Usuario</label>
+    <input id="usuario" type="text" autocomplete="username" required autofocus>
+
+    <label for="clave">Contraseña</label>
+    <input id="clave" type="password" autocomplete="current-password" required>
+
+    <button class="boton-principal" type="submit" id="boton-entrar">Entrar</button>
+    <p class="acceso-nota">¿Olvidó su contraseña? Solicítela al administrador del sistema.</p>
+  </form>
+
+  <p class="acceso-pie">
+    I.E. N.° 14762 Luciano Castillo Colonna<br>
+    La Huaca · Paita · Piura
+  </p>
 </div>
+
+<script src="js/comun.js"></script>
+<script src="js/login.js"></script>
 </body>
 </html>
