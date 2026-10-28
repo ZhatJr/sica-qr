@@ -1,12 +1,9 @@
 package pe.edu.utp.sicaqr.controlador;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.utp.sicaqr.dto.AlertaDto;
 import pe.edu.utp.sicaqr.dto.JustificacionDto;
 import pe.edu.utp.sicaqr.dto.NotificacionDto;
-import pe.edu.utp.sicaqr.seguridad.ControlAcceso;
-import pe.edu.utp.sicaqr.seguridad.Roles;
 import pe.edu.utp.sicaqr.servicio.ServicioSeguimiento;
 
 import java.util.List;
@@ -24,22 +21,19 @@ public class SeguimientoControlador {
 
     /** GET /api/justificaciones   (V07) */
     @GetMapping("/justificaciones")
-    public List<JustificacionDto> justificaciones(HttpSession sesion) {
-        ControlAcceso.exigirRol(sesion, Roles.DOCENTE, Roles.DIRECCION);
+    public List<JustificacionDto> justificaciones() {
         return servicioSeguimiento.listarJustificaciones();
     }
 
     /** GET /api/alertas   (V08) */
     @GetMapping("/alertas")
-    public List<AlertaDto> alertas(HttpSession sesion) {
-        ControlAcceso.exigirRol(sesion, Roles.DOCENTE, Roles.DIRECCION);
+    public List<AlertaDto> alertas() {
         return servicioSeguimiento.listarAlertas();
     }
 
     /** GET /api/notificaciones   (V06) */
     @GetMapping("/notificaciones")
-    public List<NotificacionDto> notificaciones(HttpSession sesion) {
-        ControlAcceso.exigirRol(sesion, Roles.ADMINISTRADOR, Roles.AUXILIAR);
+    public List<NotificacionDto> notificaciones() {
         return servicioSeguimiento.listarNotificaciones();
     }
 }

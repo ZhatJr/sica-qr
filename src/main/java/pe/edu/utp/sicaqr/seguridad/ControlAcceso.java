@@ -1,20 +1,38 @@
 package pe.edu.utp.sicaqr.seguridad;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import pe.edu.utp.sicaqr.dto.UsuarioSesion;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
- * Control de acceso por rol (RF-12).
- * Los controladores lo invocan al inicio de cada operación: sin sesión se
- * responde 401 y con un rol no autorizado, 403.
+ * Usuario autenticado en Spring Security (RF-12).
+ * Los permisos por rol se definen en {@link ConfiguracionSeguridad}; esta clase
+ * registra al usuario al iniciar sesión y lo entrega a los controladores.
  */
 public final class ControlAcceso {
 
-    public static final String CLAVE_SESION = "usuario";
-
     private ControlAcceso() {
+    }
+
+    /**
+     * Registra al usuario en Spring Security y guarda la autenticación en la sesión.
+     * El rol se registra con el prefijo ROLE_ que exige Spring Security.
+     */
+    public static void registrarAutenticacion(UsuarioSesion usuario, HttpSession sesion) {
+        Authentication autenticacion = UsernamePasswordAuthenticationToken.authenticated(
+                usuario, null, List.of(new SimpleGrantedAuthority("ROLE_" + usuario.rol())));
+
+        SecurityContext contexto = SecurityContextHolder.createEmptyContext();
+        contexto.setAuthentication(autenticacion);
+        SecurityContextHolder.setContext(contexto);
+        sesion.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, contexto);
     }
 
     /**
@@ -22,25 +40,17 @@ public final class ControlAcceso {
      *
      * @throws NoAutenticadoException si no hay sesión
      */
-    public static UsuarioSesion usuarioActual(HttpSession sesion) {
-        Object usuario = sesion.getAttribute(CLAVE_SESION);
-        if (usuario == null) {
+    public static UsuarioSesion usuarioActual() {
+        Authentication autenticacion = SecurityContextHolder.getContext().getAuthentication();
+        if (autenticacion == null || !(autenticacion.getPrincipal() instanceof UsuarioSesion usuario)) {
             throw new NoAutenticadoException();
         }
-        return (UsuarioSesion) usuario;
+        return usuario;
     }
 
-    /**
-     * Verifica que el usuario tenga alguno de los roles indicados.
-     *
-     * @return el usuario autenticado
-     * @throws AccesoDenegadoException si el rol no está autorizado
-     */
-    public static UsuarioSesion exigirRol(HttpSession sesion, String... rolesPermitidos) {
-        UsuarioSesion usuario = usuarioActual(sesion);
-        if (!Arrays.asList(rolesPermitidos).contains(usuario.rol())) {
-            throw new AccesoDenegadoException();
-        }
-        return usuario;
+    /** Indica si la petición actual tiene un usuario autenticado. */
+    public static boolean haySesion() {
+        Authentication autenticacion = SecurityContextHolder.getContext().getAuthentication();
+        return autenticacion != null && autenticacion.getPrincipal() instanceof UsuarioSesion;
     }
 }
