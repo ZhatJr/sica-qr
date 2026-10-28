@@ -1,7 +1,6 @@
 package pe.edu.utp.sicaqr.controlador;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import pe.edu.utp.sicaqr.dto.FilaAsistencia;
 import pe.edu.utp.sicaqr.dto.UsuarioSesion;
 import pe.edu.utp.sicaqr.seguridad.ControlAcceso;
-import pe.edu.utp.sicaqr.seguridad.Roles;
 import pe.edu.utp.sicaqr.servicio.ServicioAsistencia;
 import pe.edu.utp.sicaqr.servicio.ServicioAuditoria;
 import pe.edu.utp.sicaqr.servicio.ServicioReporte;
@@ -43,9 +41,9 @@ public class ReporteControlador {
             @RequestParam(required = false) Long idSeccion,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta,
-            HttpSession sesion, HttpServletRequest request) throws IOException {
+            HttpServletRequest request) throws IOException {
 
-        UsuarioSesion usuario = ControlAcceso.exigirRol(sesion, Roles.DOCENTE, Roles.DIRECCION);
+        UsuarioSesion usuario = ControlAcceso.usuarioActual();
 
         LocalDate inicio = desde != null ? desde : LocalDate.now();
         LocalDate fin = hasta != null ? hasta : LocalDate.now();

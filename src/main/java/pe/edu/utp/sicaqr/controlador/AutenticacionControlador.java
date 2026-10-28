@@ -3,6 +3,7 @@ package pe.edu.utp.sicaqr.controlador;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.utp.sicaqr.dto.LoginPeticion;
 import pe.edu.utp.sicaqr.dto.UsuarioSesion;
@@ -35,8 +36,10 @@ public class AutenticacionControlador {
             anterior.invalidate();
         }
         HttpSession sesion = request.getSession(true);
-        sesion.setAttribute(ControlAcceso.CLAVE_SESION, usuario);
         sesion.setMaxInactiveInterval(MINUTOS_INACTIVIDAD * 60);
+
+        // Spring Security: el rol del usuario queda registrado en la sesión
+        ControlAcceso.registrarAutenticacion(usuario, sesion);
 
         return usuario;
     }
@@ -44,20 +47,20 @@ public class AutenticacionControlador {
     /** POST /api/auth/logout */
     @PostMapping("/logout")
     public ResponseEntity<Void> cerrarSesion(HttpServletRequest request) {
+        if (ControlAcceso.haySesion()) {
+            servicioAutenticacion.cerrarSesion(ControlAcceso.usuarioActual(), request.getRemoteAddr());
+        }
         HttpSession sesion = request.getSession(false);
         if (sesion != null) {
-            Object usuario = sesion.getAttribute(ControlAcceso.CLAVE_SESION);
-            if (usuario != null) {
-                servicioAutenticacion.cerrarSesion((UsuarioSesion) usuario, request.getRemoteAddr());
-            }
             sesion.invalidate();
         }
+        SecurityContextHolder.clearContext();
         return ResponseEntity.noContent().build();
     }
 
     /** GET /api/auth/sesion: usuario de la sesión actual. */
     @GetMapping("/sesion")
-    public UsuarioSesion sesionActual(HttpSession sesion) {
-        return ControlAcceso.usuarioActual(sesion);
+    public UsuarioSesion sesionActual() {
+        return ControlAcceso.usuarioActual();
     }
 }

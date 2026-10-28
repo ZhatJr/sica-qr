@@ -27,6 +27,7 @@ Docente: Mg. Ing. Richard Doann Asencios Vilchez
 | Componente | Tecnología |
 |---|---|
 | Backend y API REST | Java 21+ · Spring Boot 3.5 |
+| Seguridad | Spring Security (permisos por rol) |
 | Base de datos | PostgreSQL (17 tablas, script del segundo avance) |
 | Interfaz | HTML, CSS y JavaScript |
 | Códigos QR | ZXing (generación en el servidor) · html5-qrcode (lectura con la cámara) |
@@ -84,7 +85,7 @@ El sistema aplica el patrón **MVC** sobre una arquitectura en capas:
 | `servicio` | Interfaces y sus implementaciones con las reglas del negocio |
 | `controlador` | API REST |
 | `dto` | Objetos que viajan entre la API y las pantallas |
-| `seguridad` | Control de acceso por rol y manejo de errores |
+| `seguridad` | Spring Security (`ConfiguracionSeguridad`), usuario autenticado y manejo de errores |
 
 ### Principios SOLID
 
@@ -123,11 +124,11 @@ El servicio no escribe SQL: le pide los datos a la interfaz y Spring genera la c
 | Robo de contraseñas | Se guardan cifradas con SHA-256 y sal (Guava) |
 | Fuerza bruta | La cuenta se bloquea al quinto intento fallido |
 | Descubrir qué usuarios existen | Mismo mensaje para usuario inexistente y contraseña incorrecta |
-| Acceso a módulos de otro rol | Se verifica el rol en el servidor en cada petición (401 / 403) |
+| Acceso a módulos de otro rol | Spring Security verifica el rol antes de llegar al controlador (401 / 403); las rutas de la API no definidas se bloquean |
 | Exposición de datos del menor | El QR contiene solo un UUID aleatorio, sin nombre ni DNI (Ley N.° 29733) |
 | Credencial perdida | Se revoca y deja de funcionar al instante |
 | SQL Injection | No se arma SQL con texto: los repositorios usan consultas con parámetros |
-| Robo de sesión | Se crea una sesión nueva al iniciar sesión; expira a los 30 minutos |
+| Robo de sesión | Se crea una sesión nueva al iniciar sesión; expira a los 30 minutos; cookie `HttpOnly` y `SameSite=Strict` |
 | Contraseña de la BD publicada en GitHub | Va en `config/application.properties`, que está en `.gitignore` |
 | Errores que revelan la base de datos | El usuario recibe un mensaje genérico; el detalle solo va al log |
 | Falta de trazabilidad | Toda acción importante queda en la tabla `auditoria` y en `logs/auditoria.log` |
